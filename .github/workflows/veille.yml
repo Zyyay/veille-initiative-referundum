@@ -1,0 +1,39 @@
+name: Veille Doléances
+
+on:
+  schedule:
+    # Heures UTC. Toutes les 30 min de 5 h à 19 h 30 UTC (6 h-20 h 30 l'hiver à Paris, 7 h-21 h 30 l'été),
+    # puis toutes les heures la nuit pour mettre en attente ce qui arrive (récapitulatif de 8 h).
+    - cron: "0,30 5-19 * * *"
+    - cron: "0 20-23,0-4 * * *"
+  workflow_dispatch:
+    inputs:
+      forcer:
+        description: "Tâches à forcer hors créneau (ex. recap,wiki,agenda)"
+        required: false
+        default: ""
+
+concurrency:
+  group: veille
+  cancel-in-progress: false
+
+jobs:
+  veille:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run veille
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_MENTION: ${{ secrets.DISCORD_MENTION }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+          FORCER: ${{ github.event.inputs.forcer }}

@@ -1,0 +1,32 @@
+{
+  "name": "veille-doleances",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bot de veille Doléances : Google News, Wikipédia, Assemblée nationale -> Discord",
+  "scripts": {
+    "veille": "tsx src/index.ts",
+    "veille:dry": "tsx scripts/veille-dry.ts",
+    "test:discord": "tsx scripts/test-discord.ts",
+    "test:sources": "tsx scripts/test-sources.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "groupes": "tsx scripts/lister-groupes.ts",
+    "simulation": "tsx scripts/simulation.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "adm-zip": "^0.5.16",
+    "fast-xml-parser": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

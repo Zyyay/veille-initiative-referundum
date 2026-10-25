@@ -1,0 +1,870 @@
+{
+  "_lisez_moi": "Un objet par sujet, généré depuis l'export de la table subjects. Seuls les sujets en actif: true sont surveillés. positions_declarees : sigles de config/groupes.json, position pour | contre | non_declaree, avec source et date. Termes : comparés sans accents ni majuscules, sur des mots entiers ; la presse est filtrée sur le titre (1 terme fort ou 2 termes faibles).",
+  "sujets": [
+    {
+      "id": "zfe",
+      "actif": true,
+      "titre": "Faut-il maintenir les interdictions Zones à Faibles Émissions (ZFE) aux véhicules anciens en ville ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-maintenir-les-interdictions-zones-a-faibles-emissions-zfe-aux-vehicules-anciens-en-ville",
+      "donnee": {
+        "adhesion": 22,
+        "institut": "Ifop",
+        "date": "24/04/2025",
+        "url": "https://liguedesconducteurs.org/communiques-de-presse/78-des-francais-souhaitent-suspendre-l-application-des-zones-a-faibles-emissions-zfe",
+        "question": "Êtes-vous favorable aux zones à faibles émissions (ZFE) ?"
+      },
+      "requetes_gnews": [
+        "ZFE OR \"zones à faibles émissions\" OR \"zone à faibles émissions\" OR \"Crit'Air\""
+      ],
+      "termes_forts": [
+        "ZFE",
+        "zones à faibles émissions",
+        "zone à faibles émissions",
+        "Crit'Air",
+        "vignette Crit'Air"
+      ],
+      "termes_faibles": [
+        "pollution de l'air",
+        "qualité de l'air",
+        "véhicules anciens",
+        "vieux véhicules",
+        "voitures anciennes",
+        "diesel",
+        "automobilistes"
+      ],
+      "termes_legislatifs": [
+        "zones à faibles émissions mobilité",
+        "zone à faibles émissions"
+      ],
+      "wikipedia": [
+        "Zone à faibles émissions"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "aides-entreprises",
+      "actif": false,
+      "titre": "Faut-il conditionner les aides publiques aux entreprises au maintien de l'emploi en France ?",
+      "url": "https://doleances-france.fr/sujets/conditionner-les-aides-publiques-aux-entreprises-au-maintien-de-l-emploi-en-france",
+      "donnee": {
+        "adhesion": 72,
+        "institut": "Ifop",
+        "date": "16/10/2024",
+        "url": "https://www.ifop.com/wp-content/uploads/2024/12/121075-resultats-v2-1.pdf",
+        "question": "Les aides publiques (ou autorisations de construire) aux entreprises devraient-elles être conditionnées à des engagements chiffrés emploi/environnement ?"
+      },
+      "requetes_gnews": [
+        "\"aides publiques aux entreprises\" OR \"aides aux entreprises\" OR \"conditionnalité des aides\" OR \"aides publiques\" licenciements OR CICE"
+      ],
+      "termes_forts": [
+        "aides publiques aux entreprises",
+        "aides aux entreprises",
+        "conditionnalité des aides",
+        "conditionner les aides",
+        "CICE"
+      ],
+      "termes_faibles": [
+        "aides publiques",
+        "subventions",
+        "licenciements",
+        "plan social",
+        "suppressions de postes",
+        "suppression de postes",
+        "délocalisation",
+        "fermeture d'usine",
+        "dividendes"
+      ],
+      "termes_legislatifs": [
+        "aides publiques aux entreprises",
+        "conditionnalité des aides publiques"
+      ],
+      "wikipedia": [
+        "Crédit d'impôt pour la compétitivité et l'emploi"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "dissuasion-nucleaire",
+      "actif": false,
+      "titre": "Faut-il maintenir une dissuasion nucléaire strictement nationale ?",
+      "url": "https://doleances-france.fr/sujets/maintenir-souverainete-francaise-de-la-dissuasion-nucleaire",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"dissuasion nucléaire\" OR \"parapluie nucléaire\" OR \"dissuasion française\""
+      ],
+      "termes_forts": [
+        "dissuasion nucléaire",
+        "parapluie nucléaire",
+        "dissuasion française",
+        "force de dissuasion",
+        "Forces aériennes stratégiques",
+        "exercice nucléaire",
+        "exercice nucléaire conjoint"
+      ],
+      "termes_faibles": [
+        "dissuasion",
+        "nucléaire",
+        "arme atomique",
+        "armes nucléaires",
+        "Rafale",
+        "souveraineté"
+      ],
+      "termes_legislatifs": [
+        "dissuasion nucléaire",
+        "force de dissuasion"
+      ],
+      "wikipedia": [
+        "Force de dissuasion nucléaire française"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "pass-culture",
+      "actif": false,
+      "titre": "Faut-il réserver le Pass Culture au patrimoine plutôt qu'à des industries culturelles déjà rentables ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-reserver-le-pass-culture-au-patrimoine-plutot-qu-a-des-industries-culturelles-deja-rentables",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"pass Culture\""
+      ],
+      "termes_forts": [
+        "pass Culture"
+      ],
+      "termes_faibles": [
+        "crédit culture",
+        "mangas",
+        "manga",
+        "jeunes de 18 ans",
+        "patrimoine",
+        "spectacle vivant"
+      ],
+      "termes_legislatifs": [
+        "pass Culture"
+      ],
+      "wikipedia": [
+        "Pass Culture"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "expulsions",
+      "actif": true,
+      "titre": "Faut-il renforcer les dispositifs d'expulsion des étrangers en situation irrégulière ?",
+      "url": "https://doleances-france.fr/sujets/mettre-en-place-des-dispositifs-pour-garantir-l-expulsion-effective-des-etrangers-en-situation-irreguliere",
+      "donnee": {
+        "adhesion": 84,
+        "institut": "CSA",
+        "date": "11/10/2024",
+        "url": "https://www.europe1.fr/Police-Justice/sondage-pour-84-des-francais-il-faut-emprisonner-systematiquement-les-etrangers-sous-oqtf-auteurs-de-crimes-et-delits-avant-leur-expulsion-4272385",
+        "question": "Emprisonner systématiquement les étrangers sous OQTF auteurs de crimes ou délits avant leur expulsion"
+      },
+      "requetes_gnews": [
+        "OQTF OR \"obligation de quitter le territoire\" OR \"expulsion des étrangers\" OR \"centre de rétention\""
+      ],
+      "termes_forts": [
+        "OQTF",
+        "obligation de quitter le territoire",
+        "obligations de quitter le territoire",
+        "expulsion des étrangers",
+        "éloignement des étrangers",
+        "centre de rétention",
+        "centres de rétention",
+        "accords de réadmission",
+        "laissez-passer consulaires"
+      ],
+      "termes_faibles": [
+        "expulsion",
+        "expulsions",
+        "expulsé",
+        "expulsée",
+        "étrangers",
+        "étranger",
+        "sans-papiers",
+        "situation irrégulière",
+        "clandestins",
+        "immigration",
+        "rétention",
+        "reconduite"
+      ],
+      "termes_legislatifs": [
+        "entrée et du séjour des étrangers",
+        "contrôler l'immigration",
+        "rétention administrative",
+        "mesures d'éloignement"
+      ],
+      "wikipedia": [
+        "Obligation de quitter le territoire français"
+      ],
+      "positions_declarees": {
+        "RN": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "EPR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "DR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "Dem": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "HOR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "UDR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "LFI-NFP": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "SOC": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "EcoS": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        },
+        "GDR": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/7405",
+          "date": "2026-06-16"
+        }
+      }
+    },
+    {
+      "id": "soins-non-assures",
+      "actif": false,
+      "titre": "Pour les soins non urgents, faut-il exiger un paiement avant de soigner les personnes non assurées ?",
+      "url": "https://doleances-france.fr/sujets/pour-les-soins-non-urgents-faut-il-exiger-un-paiement-avant-de-soigner-les-personnes-non-assurees",
+      "donnee": {
+        "adhesion": 72,
+        "institut": "Ifop",
+        "date": "15/01/2025",
+        "url": "https://contribuablesassocies.org/2025/02/24/sondage-exclusif-ifop-contribuables-associes-les-francais-et-la-protection-sociale-2/",
+        "question": "Êtes-vous favorable à restreindre l'aide médicale d'État aux seuls cas d'urgence ?"
+      },
+      "requetes_gnews": [
+        "\"aide médicale d'État\" OR \"aide médicale de l'État\" OR \"soins urgents et vitaux\""
+      ],
+      "termes_forts": [
+        "aide médicale d'État",
+        "aide médicale de l'État",
+        "soins urgents et vitaux",
+        "soins non urgents"
+      ],
+      "termes_faibles": [
+        "non assurés",
+        "non-assurés",
+        "sans-papiers",
+        "couverture maladie",
+        "soins",
+        "hôpital",
+        "hôpitaux",
+        "impayés"
+      ],
+      "termes_legislatifs": [
+        "aide médicale de l'État",
+        "aide médicale d'État"
+      ],
+      "wikipedia": [
+        "Aide médicale d'État"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "narcotrafic",
+      "actif": true,
+      "titre": "Faut-il augmenter les peines et les moyens pour démanteler les réseaux de drogues ?",
+      "url": "https://doleances-france.fr/sujets/augmenter-peines-trafic-de-drogue-et-moyens-demantelement-reseaux",
+      "donnee": {
+        "adhesion": 81,
+        "institut": "CSA",
+        "date": "22/11/2025",
+        "url": "https://www.europe1.fr/societe/sondage-81-des-francais-estiment-quil-faut-sanctionner-plus-durement-les-consommateurs-pour-lutter-contre-le-trafic-de-drogues-872220",
+        "question": "Il faut sanctionner plus durement les consommateurs pour lutter contre le trafic de drogue"
+      },
+      "requetes_gnews": [
+        "narcotrafic OR \"trafic de drogue\" OR \"trafic de stupéfiants\" OR \"point de deal\""
+      ],
+      "termes_forts": [
+        "narcotrafic",
+        "narcotrafiquants",
+        "narcotrafiquant",
+        "trafic de drogue",
+        "trafic de drogues",
+        "trafic de stupéfiants",
+        "point de deal",
+        "points de deal",
+        "Pnaco",
+        "parquet national anticriminalité organisée",
+        "DZ Mafia"
+      ],
+      "termes_faibles": [
+        "drogue",
+        "drogues",
+        "stupéfiants",
+        "dealers",
+        "dealer",
+        "cocaïne",
+        "cannabis",
+        "guetteurs",
+        "règlement de comptes",
+        "criminalité organisée",
+        "trafiquants"
+      ],
+      "termes_legislatifs": [
+        "narcotrafic",
+        "criminalité organisée",
+        "stupéfiants"
+      ],
+      "wikipedia": [
+        "Trafic de stupéfiants"
+      ],
+      "positions_declarees": {
+        "RN": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "EPR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "SOC": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "DR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "Dem": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "HOR": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "LIOT": {
+          "position": "pour",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "LFI-NFP": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        },
+        "EcoS": {
+          "position": "contre",
+          "source": "https://www.assemblee-nationale.fr/dyn/17/scrutins/1473",
+          "date": "2025-04-29"
+        }
+      }
+    },
+    {
+      "id": "corruption-elus",
+      "actif": false,
+      "titre": "Faut-il renforcer la chaîne judiciaire contre la corruption des élus ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-reduire-les-delais-et-augmenter-les-poursuites-contre-la-corruption-d-elus",
+      "donnee": {
+        "adhesion": 76,
+        "institut": "Harris Interactive",
+        "date": "25/10/2023",
+        "url": "https://harris-interactive.fr/wp-content/uploads/sites/6/2023/12/Rapport-Toluna-Harris-Attitude-des-Francais-face-a-la-corruption-2023-Transparency-International-FJJ.pdf",
+        "question": "Faut-il renforcer les moyens de la justice pour enquêter et poursuivre les faits de corruption ?"
+      },
+      "requetes_gnews": [
+        "\"prise illégale d'intérêts\" OR \"détournement de fonds publics\" OR \"trafic d'influence\" OR \"corruption\" élu"
+      ],
+      "termes_forts": [
+        "corruption des élus",
+        "corruption d'élus",
+        "prise illégale d'intérêts",
+        "détournement de fonds publics",
+        "trafic d'influence",
+        "atteinte à la probité",
+        "Parquet national financier"
+      ],
+      "termes_faibles": [
+        "corruption",
+        "élu",
+        "élus",
+        "maire",
+        "député",
+        "sénateur",
+        "inéligibilité",
+        "inéligible",
+        "PNF",
+        "condamné"
+      ],
+      "termes_legislatifs": [
+        "probité",
+        "corruption",
+        "transparence de la vie publique"
+      ],
+      "wikipedia": [
+        "Corruption en France"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "regle-or-budgetaire",
+      "actif": false,
+      "titre": "Faut-il inscrire dans la Constitution l'interdiction de voter un budget en déficit ?",
+      "url": "https://doleances-france.fr/sujets/interdire-constitutionnellement-le-vote-d-un-budget-en-deficit",
+      "donnee": {
+        "adhesion": 75,
+        "institut": "Ifop",
+        "date": "01/04/2026",
+        "url": "https://www.ifop.com/en/article/the-french-and-liberal-ideas",
+        "question": "Inscrire dans la Constitution une règle interdisant de voter un budget en déficit, sauf circonstances exceptionnelles"
+      },
+      "requetes_gnews": [
+        "\"règle d'or budgétaire\" OR \"équilibre budgétaire\" OR \"budget à l'équilibre\" OR \"interdire le déficit\"",
+        "déficit Constitution budget"
+      ],
+      "termes_forts": [
+        "règle d'or budgétaire",
+        "équilibre budgétaire",
+        "budget à l'équilibre",
+        "budget en équilibre",
+        "déficit dans la Constitution",
+        "dette dans la Constitution"
+      ],
+      "termes_faibles": [
+        "Constitution",
+        "constitutionnelle",
+        "constitutionnaliser",
+        "TSCG",
+        "Haut Conseil des finances publiques",
+        "règle budgétaire"
+      ],
+      "termes_legislatifs": [
+        "règle d'or",
+        "équilibre budgétaire"
+      ],
+      "wikipedia": [
+        "Règle d'or budgétaire"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "legitime-defense",
+      "actif": false,
+      "titre": "Faut-il renforcer le droit de légitime défense du citoyen ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-renforcer-le-droit-de-legitime-defense-du-citoyen",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"légitime défense\""
+      ],
+      "termes_forts": [
+        "légitime défense",
+        "présomption de légitime défense",
+        "défense des biens",
+        "autodéfense",
+        "s'autodéfendre"
+      ],
+      "termes_faibles": [
+        "cambriolage",
+        "cambriolages",
+        "cambrioleur",
+        "cambrioleurs",
+        "home-jacking",
+        "intrus",
+        "effraction",
+        "s'est défendu"
+      ],
+      "termes_legislatifs": [
+        "légitime défense",
+        "article 122-5",
+        "article 122-6"
+      ],
+      "wikipedia": [
+        "Légitime défense"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "logement-social",
+      "actif": false,
+      "titre": "Faut-il réformer l'attribution et le contrôle des logements sociaux en France ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-reformer-l-attribution-et-le-controle-des-logements-sociaux-en-france",
+      "donnee": {
+        "adhesion": 77,
+        "institut": "CSA",
+        "date": "24/09/2025",
+        "url": "https://www.cnews.fr/france/2025-09-24/sondage-pres-de-8-francais-sur-10-souhaitent-que-les-logements-hlm-soient",
+        "question": "Les logements HLM devraient être attribués en priorité aux personnes de nationalité française"
+      },
+      "requetes_gnews": [
+        "(\"logements sociaux\" OR \"logement social\" OR HLM) (attribution OR attributions OR surloyer OR plafonds OR contrôle OR expulsion OR priorité OR fraude)",
+        "ANCOLS OR surloyer OR \"attribution des logements sociaux\""
+      ],
+      "termes_forts": [
+        "attribution des logements sociaux",
+        "attributions de logements sociaux",
+        "attribution des HLM",
+        "attribution des logements",
+        "ANCOLS",
+        "surloyer",
+        "supplément de loyer de solidarité",
+        "plafonds de ressources"
+      ],
+      "termes_faibles": [
+        "logement social",
+        "logements sociaux",
+        "HLM",
+        "bailleurs sociaux",
+        "bailleur social",
+        "attribution",
+        "attributions",
+        "plafonds",
+        "expulsion",
+        "expulser",
+        "demandeurs"
+      ],
+      "termes_legislatifs": [
+        "logement social",
+        "logements sociaux",
+        "habitation à loyer modéré"
+      ],
+      "wikipedia": [
+        "Logement social en France"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "emploi-seniors",
+      "actif": false,
+      "titre": "Faut-il faire plus pour l'emploi des seniors en France ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-faire-plus-pour-l-emploi-des-seniors-en-france",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"emploi des seniors\" OR \"chômage des seniors\" OR \"cumul emploi-retraite\" OR \"salariés expérimentés\""
+      ],
+      "termes_forts": [
+        "emploi des seniors",
+        "chômage des seniors",
+        "seniors au travail",
+        "index seniors",
+        "cumul emploi-retraite",
+        "salariés expérimentés"
+      ],
+      "termes_faibles": [
+        "seniors",
+        "senior",
+        "fin de carrière",
+        "retraite progressive",
+        "discrimination liée à l'âge",
+        "âgés"
+      ],
+      "termes_legislatifs": [
+        "emploi des salariés expérimentés",
+        "emploi des seniors",
+        "salariés âgés"
+      ],
+      "wikipedia": [],
+      "positions_declarees": {}
+    },
+    {
+      "id": "revenu-agriculteurs",
+      "actif": false,
+      "titre": "Faut-il mieux soutenir le revenu des agriculteurs ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-reformer-les-regles-agricoles-pour-revaloriser-le-metier-d-agriculteur",
+      "donnee": {
+        "adhesion": 81,
+        "institut": "Ifop",
+        "date": "03/10/2024",
+        "url": "https://www.ifop.com/publication/barometre-dimage-des-agriculteurs-4/",
+        "question": "La rémunération des agriculteurs est insuffisante"
+      },
+      "requetes_gnews": [
+        "\"revenu des agriculteurs\" OR \"colère des agriculteurs\" OR \"crise agricole\" OR Egalim"
+      ],
+      "termes_forts": [
+        "revenu des agriculteurs",
+        "revenu agricole",
+        "colère des agriculteurs",
+        "colère agricole",
+        "crise agricole",
+        "Egalim",
+        "politique agricole commune"
+      ],
+      "termes_faibles": [
+        "agriculteurs",
+        "agriculteur",
+        "agricole",
+        "éleveurs",
+        "éleveur",
+        "FNSEA",
+        "Coordination rurale",
+        "Mercosur",
+        "exploitations"
+      ],
+      "termes_legislatifs": [
+        "orientation agricole",
+        "Egalim",
+        "souveraineté alimentaire",
+        "revenu des agriculteurs"
+      ],
+      "wikipedia": [
+        "Agriculture en France"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "exigence-examens",
+      "actif": false,
+      "titre": "Faut-il relever le niveau d'exigence des examens (bac, brevet), même si cela fait baisser le taux de réussite ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-relever-le-niveau-d-exigence-des-examens-bac-brevet-meme-si-cela-fait-baisser-le-taux-de-reussite",
+      "donnee": {
+        "adhesion": 67,
+        "institut": "Ifop",
+        "date": "01/09/2023",
+        "url": "https://www.ifop.com/publication/50033/",
+        "question": "Souhaitez-vous un retour à un baccalauréat plus exigeant ?"
+      },
+      "requetes_gnews": [
+        "\"baccalauréat\" OR \"brevet des collèges\" OR \"choc des savoirs\" OR \"niveau scolaire\" OR \"groupes de niveau\""
+      ],
+      "termes_forts": [
+        "baccalauréat",
+        "brevet des collèges",
+        "taux de réussite au bac",
+        "choc des savoirs",
+        "groupes de niveau",
+        "niveau scolaire",
+        "PISA"
+      ],
+      "termes_faibles": [
+        "bac",
+        "brevet",
+        "examens",
+        "examen",
+        "notation",
+        "correctifs",
+        "élèves",
+        "niveau"
+      ],
+      "termes_legislatifs": [
+        "baccalauréat",
+        "diplôme national du brevet"
+      ],
+      "wikipedia": [
+        "Baccalauréat en France"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "metier-enseignant",
+      "actif": false,
+      "titre": "Faut-il revaloriser le métier d'enseignant pour enrayer la crise de recrutement ?",
+      "url": "https://doleances-france.fr/sujets/attractivite-metier-enseignant",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"recrutement des enseignants\" OR \"salaire des enseignants\" OR \"concours enseignants\" OR \"manque de professeurs\" OR \"pacte enseignant\""
+      ],
+      "termes_forts": [
+        "recrutement des enseignants",
+        "crise de recrutement",
+        "salaire des enseignants",
+        "salaires des enseignants",
+        "rémunération des enseignants",
+        "métier d'enseignant",
+        "concours enseignants",
+        "pacte enseignant",
+        "manque de professeurs",
+        "colère des enseignants"
+      ],
+      "termes_faibles": [
+        "enseignants",
+        "enseignant",
+        "professeurs",
+        "professeur",
+        "profs",
+        "recrutement",
+        "revalorisation",
+        "démissions",
+        "concours",
+        "postes non pourvus"
+      ],
+      "termes_legislatifs": [
+        "personnels enseignants",
+        "revalorisation des enseignants"
+      ],
+      "wikipedia": [
+        "Enseignant"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "aide-developpement",
+      "actif": false,
+      "titre": "Faut-il réduire l'aide française au développement international ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-reduire-le-budget-de-l-aide-publique-au-developpement-de-la-france",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"aide publique au développement\" OR \"aide au développement\" OR \"Agence française de développement\""
+      ],
+      "termes_forts": [
+        "aide publique au développement",
+        "aide au développement",
+        "Agence française de développement",
+        "solidarité internationale"
+      ],
+      "termes_faibles": [
+        "aide internationale",
+        "pays en développement",
+        "pays pauvres",
+        "coopération internationale",
+        "Afrique",
+        "aide humanitaire"
+      ],
+      "termes_legislatifs": [
+        "aide publique au développement",
+        "solidarité internationale",
+        "développement solidaire"
+      ],
+      "wikipedia": [
+        "Aide publique au développement"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "revocation-elus",
+      "actif": false,
+      "titre": "Faut-il donner aux citoyens le droit de révoquer un élu en exercice ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-donner-aux-citoyens-le-droit-de-revoquer-un-elu-en-exercice",
+      "donnee": {
+        "adhesion": 68,
+        "institut": "Ifop",
+        "date": "18/01/2019",
+        "url": "https://www.ifop.com/article/les-francais-et-le-referendum-dinitiative-citoyenne/",
+        "question": "Faut-il permettre aux citoyens de révoquer un élu en cours de mandat par référendum ?"
+      },
+      "requetes_gnews": [
+        "\"référendum révocatoire\" OR \"révocation des élus\" OR \"révoquer un élu\" OR \"référendum de révocation\" OR révocatoire"
+      ],
+      "termes_forts": [
+        "référendum révocatoire",
+        "référendum de révocation",
+        "révocation des élus",
+        "révocation d'un élu",
+        "révoquer un élu",
+        "révoquer les élus"
+      ],
+      "termes_faibles": [
+        "révocation",
+        "révoquer",
+        "révocatoire",
+        "destitution",
+        "élus",
+        "mandat",
+        "référendum"
+      ],
+      "termes_legislatifs": [
+        "référendum révocatoire",
+        "révocation des élus"
+      ],
+      "wikipedia": [
+        "Référendum révocatoire"
+      ],
+      "positions_declarees": {}
+    },
+    {
+      "id": "ric",
+      "actif": true,
+      "titre": "Faut-il instaurer un référendum d'initiative citoyenne ?",
+      "url": "https://doleances-france.fr/sujets/faut-il-instaurer-un-referendum-d-initiative-citoyenne",
+      "donnee": {
+        "adhesion": 77,
+        "institut": "Ifop",
+        "date": "21/01/2019",
+        "url": "https://www.ifop.com/wp-content/uploads/2019/02/cp-ric-def.pdf",
+        "question": "Favorable à un référendum d'initiative citoyenne de proposition, permettant de soumettre à référendum une proposition de loi ne provenant pas du Parlement"
+      },
+      "requetes_gnews": [
+        "\"référendum d'initiative citoyenne\" OR \"référendum d'initiative partagée\" OR RIC référendum"
+      ],
+      "termes_forts": [
+        "référendum d'initiative citoyenne",
+        "référendum d'initiative partagée",
+        "RIC",
+        "initiative citoyenne"
+      ],
+      "termes_faibles": [
+        "référendum",
+        "référendums",
+        "pétition",
+        "pétitions",
+        "démocratie directe",
+        "signatures",
+        "consultation citoyenne"
+      ],
+      "termes_legislatifs": [
+        "référendum d'initiative citoyenne",
+        "référendum d'initiative partagée",
+        "article 11 de la Constitution"
+      ],
+      "wikipedia": [
+        "Référendum d'initiative citoyenne",
+        "Référendum d'initiative partagée"
+      ],
+      "positions_declarees": {}
+    }
+  ]
+}

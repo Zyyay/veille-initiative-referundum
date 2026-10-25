@@ -1,0 +1,12 @@
+{
+  "_lisez_moi": "medias_nationaux = poids 1 ; tout autre média = poids 0,5 ; domaines_exclus = ignorés. Domaine sans 'www.'.",
+  "medias_nationaux": [
+    "lemonde.fr", "lefigaro.fr", "liberation.fr", "francetvinfo.fr", "la-croix.com",
+    "mediapart.fr", "marianne.net", "humanite.fr", "tf1info.fr", "lci.fr", "francetelevisions.fr",
+    "afp.com", "lesechos.fr", "publicsenat.fr", "lcp.fr", "bfmtv.com", "europe1.fr", "rtl.fr",
+    "radiofrance.fr", "franceinter.fr", "franceculture.fr", "lepoint.fr", "lexpress.fr",
+    "nouvelobs.com", "leparisien.fr", "ouest-france.fr", "sudouest.fr", "20minutes.fr", "latribune.fr",
+    "challenges.fr", "lopinion.fr", "huffingtonpost.fr", "valeursactuelles.com", "lejdd.fr"
+  ],
+  "domaines_exclus": ["legorafi.fr"]
+}

@@ -1,0 +1,48 @@
+{
+  "_lisez_moi": "Sujets fictifs utilisés par les tests et la simulation (SUJETS_FILE). Ne pas modifier : les vrais sujets sont dans config/sujets.json.",
+  "sujets": [
+    {
+      "id": "exemple-retraites",
+      "actif": true,
+      "titre": "EXEMPLE — Faut-il [action] ?",
+      "url": "https://doleances-france.fr/sujets/exemple-retraites",
+      "donnee": {
+        "adhesion": null,
+        "institut": "à renseigner",
+        "date": "à renseigner",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"âge de départ\" OR \"réforme des retraites\" -complémentaire"
+      ],
+      "termes_forts": ["âge de départ", "réforme des retraites", "âge légal"],
+      "termes_faibles": ["retraite", "retraites", "pension", "cotisation", "trimestres"],
+      "termes_legislatifs": ["assurance vieillesse", "âge d'ouverture des droits", "régimes de retraite"],
+      "wikipedia": ["Retraite en France"],
+      "positions_declarees": {
+        "EXEMPLE_SIGLE_A": { "position": "non_declaree", "source": "", "date": "" },
+        "EXEMPLE_SIGLE_B": { "position": "non_declaree", "source": "", "date": "" }
+      }
+    },
+    {
+      "id": "exemple-qualifications",
+      "actif": true,
+      "titre": "EXEMPLE — Faut-il réduire les délais de reconnaissance des qualifications étrangères ?",
+      "url": "https://doleances-france.fr/sujets/exemple-qualifications",
+      "donnee": {
+        "adhesion": null,
+        "institut": "à renseigner",
+        "date": "à renseigner",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"reconnaissance des diplômes\" OR \"équivalence de diplôme\" étrangers"
+      ],
+      "termes_forts": ["reconnaissance des diplômes", "équivalence de diplôme", "reconnaissance des qualifications"],
+      "termes_faibles": ["diplôme", "diplômes", "étrangers", "qualification", "équivalence"],
+      "termes_legislatifs": ["reconnaissance des qualifications professionnelles", "titres de formation"],
+      "wikipedia": [],
+      "positions_declarees": {}
+    }
+  ]
+}

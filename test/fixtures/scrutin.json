@@ -1,0 +1,11 @@
+{"scrutin":{"uid":"VTANR5L17V9001","numero":"9001","dateScrutin":"2026-10-20",
+"typeVote":{"codeTypeVote":"SPO","libelleTypeVote":"scrutin public ordinaire"},
+"sort":{"code":"adopté","libelle":"L'Assemblée nationale a adopté."},
+"titre":"l'amendement n° 45 de M. Dupont à l'article 3 du projet de loi relatif à l'assurance vieillesse",
+"objet":{"libelle":"Réforme des retraites"},
+"syntheseVote":{"nombreVotants":"90","suffragesExprimes":"80","nbrSuffragesRequis":"41","decompte":{"pour":"42","contre":"38","abstentions":"10","nonVotants":"1"}},
+"ventilationVotes":{"organe":{"organeRef":"PO1","groupes":{"groupe":[
+ {"organeRef":"POA","nombreMembresGroupe":"100","vote":{"positionMajoritaire":"pour","decompteVoix":{"pour":"40","contre":"2","abstentions":"0","nonVotants":"1"}}},
+ {"organeRef":"POB","nombreMembresGroupe":"80","vote":{"positionMajoritaire":"contre","decompteVoix":{"pour":"0","contre":"30","abstentions":"5","nonVotants":"0"}}},
+ {"organeRef":"POC","nombreMembresGroupe":"20","vote":{"positionMajoritaire":"abstention","decompteVoix":{"pour":"2","contre":"6","abstentions":"5","nonVotants":"0"}}}
+]}}}}}

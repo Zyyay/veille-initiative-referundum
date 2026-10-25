@@ -1,0 +1,7 @@
+{
+  "_lisez_moi": "URL de l'open data de l'Assemblée à VÉRIFIER à la première installation (étape 6 du guide). Elles suivent le schéma du portail data.assemblee-nationale.fr pour la 17e législature.",
+  "an_scrutins_zip": "https://data.assemblee-nationale.fr/static/openData/repository/17/loi/scrutins/Scrutins.json.zip",
+  "an_agenda_zip": "https://data.assemblee-nationale.fr/static/openData/repository/17/vp/reunions/Agenda.json.zip",
+  "an_page_scrutin": "https://www.assemblee-nationale.fr/dyn/17/scrutins/{numero}",
+  "an_page_reunion": "https://www.assemblee-nationale.fr/dyn/17/agenda"
+}

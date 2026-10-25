@@ -1,0 +1,17 @@
+{
+  "_lisez_moi": "Correspondance entre l'identifiant d'organe de l'Assemblée (PO...) et le sigle du groupe. Lance 'npm run groupes' pour lister les identifiants présents dans les scrutins, puis complète. Les sigles doivent être identiques à ceux de positions_declarees dans sujets.json.",
+  "groupes": {
+    "PO845401": "RN",
+    "PO845407": "EPR",
+    "PO845413": "LFI-NFP",
+    "PO845419": "SOC",
+    "PO845425": "DR",
+    "PO845439": "EcoS",
+    "PO845454": "Dem",
+    "PO845470": "HOR",
+    "PO845485": "LIOT",
+    "PO872880": "UDR",
+    "PO845514": "GDR",
+    "PO840056": "NI"
+  }
+}
