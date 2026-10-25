@@ -35,7 +35,6 @@ export interface Regles {
   garde_fous: { delai_meme_sujet_heures: number; mentions_max_par_jour: number; peremption_recap_heures: number };
   agenda: { horizon_jours: number; rappel_minutes_avant: number; exclure_textes_budgetaires: boolean };
   scrutins: { jours_reference_participation: number; seuil_sous_participation: number };
-  brouillons: { actifs: boolean; niveaux: string[]; reseaux: string[]; modele: string };
 }
 
 export interface Medias { medias_nationaux: string[]; domaines_exclus: string[] }
@@ -78,7 +77,6 @@ export const env = {
   supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   discordWebhook: process.env.DISCORD_WEBHOOK_URL ?? "",
   discordMention: process.env.DISCORD_MENTION ?? "@everyone",
-  anthropicKey: process.env.ANTHROPIC_API_KEY ?? "",
   contact: process.env.CONTACT_EMAIL ?? "contact@doleances-france.fr",
   forcer: process.env.FORCER ?? "", // ex. "recap,wiki,agenda" pour lancer une tâche hors créneau
 };

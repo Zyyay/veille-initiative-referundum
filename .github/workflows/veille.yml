@@ -34,6 +34,5 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_MENTION: ${{ secrets.DISCORD_MENTION }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
           FORCER: ${{ github.event.inputs.forcer }}

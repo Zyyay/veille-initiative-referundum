@@ -27,11 +27,5 @@
   "scrutins": {
     "jours_reference_participation": 120,
     "seuil_sous_participation": 0.5
-  },
-  "brouillons": {
-    "actifs": true,
-    "niveaux": ["haute"],
-    "reseaux": ["x"],
-    "modele": "claude-sonnet-5-5"
   }
 }

@@ -49,10 +49,8 @@ async function tachePresse(cfg: Config, store: Store, now: Date, jour: string) {
     scores.push({ sujet_id: sujet.id, articles_fenetre: sc.articlesFenetre, histoires: sc.histoires.length, medias: sc.medias,
       reference: sc.reference, ratio: Number(sc.ratio.toFixed(2)), bonus_wiki: sc.bonusWiki, historique_jours: sc.historiqueJours, niveau: sc.niveau });
     if (!sc.niveau || sc.niveau === "basse") continue; // le seul bonus Wikipédia est déjà signalé par la tâche Wikipédia
-    const faits = sc.histoires.slice(0, 3).map((h) => `- ${h.titre} (${[...new Set(h.articles.map((a) => a.source_nom))].slice(0, 4).join(", ")})`).join("\n");
     const issue = await publier({
       cle: `presse:${sujet.id}:${creneau}`, sujet, type: "presse", niveau: sc.niveau, embeds: [embedPresse(sujet, sc)],
-      faits: `Couverture médiatique en hausse (${sc.articlesFenetre} articles en 3 h) :\n${faits}`,
       dernier: sc.histoires.map((h) => h.dernier).sort().at(-1),
     }, cfg, store, now);
     info(`  ${sujet.id} : niveau ${sc.niveau} → ${issue}`);
@@ -67,10 +65,8 @@ async function tacheScrutins(cfg: Config, store: Store, now: Date, jour: string)
   const premier = !(await store.lireEtat<boolean>("scrutins_initialise"));
   for (const { sujet, analyse } of res.analyses) {
     const niveau = niveauVote(analyse);
-    const lignes = analyse.groupes.map((g) => `${g.sigle} : ${g.pour} pour, ${g.contre} contre, ${g.abstentions} abstentions, ${g.absents} absents${g.positionDeclaree ? ` (position déclarée : ${g.positionDeclaree})` : ""}`).join("\n");
     await publier({
       cle: `vote:${analyse.uid}:${sujet.id}`, sujet, type: "vote", niveau, embeds: [embedVote(sujet, analyse)],
-      faits: `Scrutin public du ${analyse.date} : ${analyse.titre}\nRésultat : ${analyse.adopte ? "adopté" : "rejeté"} (${analyse.pour} pour, ${analyse.contre} contre)\n${lignes}`,
       dernier: new Date(analyse.date).toISOString(), forcerAttente: premier,
     }, cfg, store, now);
   }
@@ -123,8 +119,7 @@ async function tacheRappels(cfg: Config, store: Store, now: Date) {
     if (!sujets.length) continue;
     const r: Reunion = { uid: a.uid, debut: a.debut, lieu: a.lieu, type: "seance", objet: a.objet, etat: a.etat };
     await publier({ cle: `rappel:${a.uid}`, sujet: sujets[0], type: "rappel", niveau: "haute",
-      embeds: [embedAgenda(sujets, r, "rappel", cfg.sources.an_page_reunion)],
-      faits: `Séance publique à ${formatDateHeure(new Date(a.debut))}. Ordre du jour : ${a.objet.slice(0, 800)}` }, cfg, store, now);
+      embeds: [embedAgenda(sujets, r, "rappel", cfg.sources.an_page_reunion)] }, cfg, store, now);
   }
 }
 

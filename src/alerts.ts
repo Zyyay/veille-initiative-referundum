@@ -3,7 +3,6 @@ import { envoyer, type Embed } from "./lib/discord.js";
 import type { Store } from "./lib/store.js";
 import { enPlageSilencieuse, heures, minutesParis } from "./lib/time.js";
 import { rang } from "./scoring.js";
-import { genererBrouillons } from "./drafts.js";
 
 export interface Candidate {
   cle: string;
@@ -11,7 +10,6 @@ export interface Candidate {
   type: "presse" | "wiki" | "agenda" | "agenda_modif" | "rappel" | "vote" | "budget";
   niveau: "haute" | "moyenne" | "basse" | "info";
   embeds: Embed[];
-  faits?: string;               // pour les brouillons
   dernier?: string;             // date du fait le plus récent (péremption du récapitulatif)
   forcerAttente?: boolean;      // ex. premier passage : tout va au récapitulatif
   seance?: { debut: string; objet: string }; // texte budgétaire : regroupé dans le récapitulatif
@@ -35,7 +33,7 @@ export async function publier(c: Candidate, cfg: Config, store: Store, now: Date
       return "ignoree_delai";
   }
 
-  const base = { cree_le: now.toISOString(), cle: c.cle, sujet_id: sujetId, type: c.type, niveau: c.niveau, payload: { embeds: c.embeds, dernier: c.dernier ?? null, faits: c.faits ?? null, seance: c.seance ?? null } };
+  const base = { cree_le: now.toISOString(), cle: c.cle, sujet_id: sujetId, type: c.type, niveau: c.niveau, payload: { embeds: c.embeds, dernier: c.dernier ?? null, seance: c.seance ?? null } };
   const { debut, fin } = cfg.regles.plage_silencieuse;
   const silence = enPlageSilencieuse(now, debut, fin, cfg.regles.fuseau);
 
@@ -46,12 +44,7 @@ export async function publier(c: Candidate, cfg: Config, store: Store, now: Date
   }
 
   const mention = c.niveau === "haute" && (await store.mentionsDepuis(minuitParis(now))) < g.mentions_max_par_jour;
-  const embeds = [...c.embeds];
-  if (c.sujet && c.faits && cfg.regles.brouillons.niveaux.includes(c.niveau)) {
-    const b = await genererBrouillons(cfg, c.sujet, c.faits);
-    if (b) embeds.push(b);
-  }
-  await envoyer(embeds, mention);
+  await envoyer(c.embeds, mention);
   await store.enregistrerAlerte({ ...base, mention, statut: "envoyee" });
   return "envoyee";
 }
