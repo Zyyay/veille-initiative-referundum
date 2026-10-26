@@ -160,8 +160,17 @@ async function main() {
   const now = new Date();
   const cfg = loadConfig();
   const store = creerStore();
-  const jour = parisParts(now, cfg.regles.fuseau).jour;
+  const { jour, h } = parisParts(now, cfg.regles.fuseau);
   info(`Veille Doléances — ${formatDateHeure(now)} (Paris) — ${cfg.sujets.length} sujet(s)${env.dryRun ? " — MODE ESSAI" : ""}`);
+
+  // Le cron GitHub n'est qu'un secours du déclencheur externe : il s'arrête hors de 8 h-21 h (Paris)
+  // ou si un passage a déjà eu lieu dans les 45 dernières minutes.
+  if (env.evenement === "schedule") {
+    const dernier = await store.lireEtat<string>("dernier_passage");
+    if (h < 8 || h > 21) { info("Secours : hors de la plage 8 h-21 h, rien à faire."); return; }
+    if (dernier && now.getTime() - +new Date(dernier) < 45 * 60_000) { info(`Secours : passage déjà fait à ${formatDateHeure(new Date(dernier))}, rien à faire.`); return; }
+  }
+  await store.ecrireEtat("dernier_passage", now.toISOString());
 
   await tache("Wikipédia", () => tacheWiki(cfg, store, now, jour));
   await tache("Google News", () => tachePresse(cfg, store, now, jour));

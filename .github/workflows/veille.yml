@@ -2,10 +2,10 @@ name: Veille Doléances
 
 on:
   schedule:
-    # Heures UTC. Toutes les 30 min de 5 h à 19 h 30 UTC (6 h-20 h 30 l'hiver à Paris, 7 h-21 h 30 l'été),
-    # puis toutes les heures la nuit pour mettre en attente ce qui arrive (récapitulatif de 8 h).
-    - cron: "0,30 5-19 * * *"
-    - cron: "0 20-23,0-4 * * *"
+    # Le passage horaire (8 h-21 h, heure de Paris) est lancé par cron-job.org via workflow_dispatch.
+    # Ce cron GitHub n'est qu'un secours, à h:37 UTC de 6 h à 20 h pour couvrir été comme hiver :
+    # le bot s'arrête aussitôt hors de 8 h-21 h à Paris ou si le passage de l'heure a déjà eu lieu.
+    - cron: "37 6-20 * * *"
   workflow_dispatch:
     inputs:
       forcer:

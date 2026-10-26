@@ -79,4 +79,5 @@ export const env = {
   discordMention: process.env.DISCORD_MENTION ?? "@everyone",
   contact: process.env.CONTACT_EMAIL ?? "contact@doleances-france.fr",
   forcer: process.env.FORCER ?? "", // ex. "recap,wiki,agenda" pour lancer une tâche hors créneau
+  evenement: process.env.GITHUB_EVENT_NAME ?? "", // "schedule" : cron GitHub de secours
 };
