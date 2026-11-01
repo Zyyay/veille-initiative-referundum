@@ -865,6 +865,77 @@
         "Référendum d'initiative partagée"
       ],
       "positions_declarees": {}
+    },
+    {
+      "id": "prisons",
+      "actif": true,
+      "titre": "Prisons : faut-il construire plus de places et faire cesser drogue, téléphones et loisirs non autorisés en détention ?",
+      "url": "https://doleances-france.fr/sujets/prisons-faut-il-construire-plus-de-places-et-faire-cesser-drogue-telephones-et-loisirs-non-autorises-en-detention",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "\"surpopulation carcérale\" OR \"places de prison\" OR \"administration pénitentiaire\" OR \"établissements pénitentiaires\" OR \"prisons de haute sécurité\"",
+        "prison (portables OR téléphones OR drogue OR drone OR fouilles OR surveillants OR détenus OR mutinerie) -\"mois de prison\" -\"ans de prison\" -\"prison ferme\" -\"prison avec sursis\""
+      ],
+      "termes_forts": [
+        "surpopulation carcérale",
+        "places de prison",
+        "places de détention",
+        "administration pénitentiaire",
+        "établissements pénitentiaires",
+        "parc pénitentiaire",
+        "surveillants pénitentiaires",
+        "construction de prisons",
+        "nouvelles prisons",
+        "prisons modulaires",
+        "prison de haute sécurité",
+        "prisons de haute sécurité",
+        "plan 15 000",
+        "régulation carcérale",
+        "conditions de détention",
+        "drogue en prison",
+        "drogue en détention",
+        "téléphones en prison",
+        "téléphones en détention"
+      ],
+      "termes_faibles": [
+        "prison",
+        "prisons",
+        "détenus",
+        "détention",
+        "carcéral",
+        "carcérale",
+        "surveillants",
+        "pénitentiaire",
+        "maison d'arrêt",
+        "centre pénitentiaire",
+        "téléphones",
+        "portables",
+        "fouilles",
+        "cellules",
+        "drone",
+        "drones",
+        "parloir",
+        "parloirs",
+        "mutinerie"
+      ],
+      "termes_legislatifs": [
+        "administration pénitentiaire",
+        "établissements pénitentiaires",
+        "service public pénitentiaire",
+        "exécution des peines",
+        "surpopulation carcérale",
+        "programmation immobilière pénitentiaire"
+      ],
+      "wikipedia": [
+        "Prison en France",
+        "Surpopulation carcérale"
+      ],
+      "positions_declarees": {}
     }
   ]
 }
