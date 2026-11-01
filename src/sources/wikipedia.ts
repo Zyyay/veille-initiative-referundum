@@ -1,5 +1,5 @@
 import type { Config } from "../lib/config.js";
-import { requete } from "../lib/http.js";
+import { recuperer } from "../lib/http.js";
 import { mediane } from "../lib/time.js";
 import type { Store } from "../lib/store.js";
 
@@ -27,10 +27,10 @@ export async function collecterWikipedia(cfg: Config, store: Store, log: (m: str
   for (const sujet of cfg.sujets) {
     for (const article of sujet.wikipedia) {
       try {
-        const r = await requete(urlVues(article, debut, fin));
+        const r = await recuperer(urlVues(article, debut, fin));
         if (r.status === 404) { log(`Wikipédia — article introuvable ou sans données : « ${article} » (sujet ${sujet.id})`); continue; }
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const json = (await r.json()) as { items?: { timestamp: string; views: number }[] };
+        if (!r.ok) throw new Error(`HTTP ${r.status} après ${r.tentatives} tentative(s)`);
+        const json = r.json<{ items?: { timestamp: string; views: number }[] }>();
         const lignes = (json.items ?? []).map((i) => ({
           article, jour: `${i.timestamp.slice(0, 4)}-${i.timestamp.slice(4, 6)}-${i.timestamp.slice(6, 8)}`, vues: i.views,
         }));

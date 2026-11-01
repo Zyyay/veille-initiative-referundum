@@ -1,6 +1,7 @@
 import { XMLParser } from "fast-xml-parser";
 import type { Config, Sujet } from "../lib/config.js";
 import { attendre, texte } from "../lib/http.js";
+import { mediaExclu } from "../lib/medias.js";
 import { domaine, nettoyerTitre, rattacher } from "../lib/text.js";
 import type { Article } from "../lib/store.js";
 
@@ -36,15 +37,18 @@ export function analyserRss(xml: string): ElementRss[] {
 
 /** Collecte Google News pour tous les sujets ; renvoie les articles rattachés (nouveaux ou non). */
 export async function collecterGoogleNews(cfg: Config, log: (m: string) => void): Promise<Article[]> {
-  const exclus = new Set(cfg.medias.domaines_exclus);
   const resultats: Article[] = [];
+  let premiere = true;
   for (const sujet of cfg.sujets) {
     const vus = new Set<string>();
     for (const req of sujet.requetes_gnews) {
+      // Espacement entre requêtes : des rafales rapprochées déclenchent des HTTP 503 chez Google News.
+      if (!premiere) await attendre(cfg.regles.reseau.gnews_delai_ms);
+      premiere = false;
       try {
         const xml = await texte(urlRecherche(req));
         for (const el of analyserRss(xml)) {
-          if (vus.has(el.guid) || exclus.has(el.source_domaine)) continue;
+          if (vus.has(el.guid) || mediaExclu(el.source_domaine, cfg.medias)) continue;
           if (cfg.regles.presse.filtrer_par_titre && !rattacher(el.titre, sujet).ok) continue;
           vus.add(el.guid);
           resultats.push({ sujet_id: sujet.id, ...el });
@@ -52,7 +56,6 @@ export async function collecterGoogleNews(cfg: Config, log: (m: string) => void)
       } catch (e) {
         log(`Google News — sujet ${sujet.id}, requête « ${req} » : ${(e as Error).message}`);
       }
-      await attendre(400); // politesse envers Google News
     }
   }
   return resultats;

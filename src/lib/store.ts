@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { env } from "./config.js";
+import type { EmpreinteHistoire } from "../scoring.js";
 
 export interface Article {
   sujet_id: string; guid: string; titre: string; source_nom: string; source_domaine: string; lien: string; publie_le: string;
@@ -10,7 +11,8 @@ export interface Alerte {
   statut: "envoyee" | "en_attente" | "ecartee"; payload: Record<string, unknown>; cree_le?: string; envoyee_le?: string | null;
 }
 export interface ScoreLigne {
-  sujet_id: string; articles_fenetre: number; histoires: number; medias: number; reference: number; ratio: number;
+  sujet_id: string; articles_fenetre: number; histoires: number; medias: number; medias_nationaux: number;
+  reference: number | null; jours_reference: number; ratio: number | null;
   bonus_wiki: boolean; historique_jours: number; niveau: string | null;
 }
 export interface AgendaLigne {
@@ -34,6 +36,8 @@ export interface Store {
   marquerAlertes(cles: string[], statut: Alerte["statut"]): Promise<void>;
   agendaTous(): Promise<AgendaLigne[]>;
   enregistrerAgenda(l: AgendaLigne): Promise<void>;
+  histoiresDepuis(sujetId: string, depuis: Date): Promise<EmpreinteHistoire[]>;
+  enregistrerHistoires(e: EmpreinteHistoire[]): Promise<void>;
   purger(): Promise<void>;
 }
 
@@ -118,6 +122,14 @@ export class SupabaseStore implements Store {
   async enregistrerAgenda(l: AgendaLigne) {
     this.ok(await this.db.from("veille_agenda").upsert({ ...l, maj_le: new Date().toISOString() }, { onConflict: "uid" }), "enregistrerAgenda");
   }
+  async histoiresDepuis(sujetId: string, depuis: Date) {
+    const r = await this.db.from("veille_histoires").select("sujet_id,cree_le,niveau,medias,mots,guids,alerte_cle")
+      .eq("sujet_id", sujetId).gte("cree_le", depuis.toISOString()).order("cree_le", { ascending: false });
+    return (this.ok(r, "histoiresDepuis") as EmpreinteHistoire[]).map((e) => ({ ...e, medias: Number(e.medias) }));
+  }
+  async enregistrerHistoires(e: EmpreinteHistoire[]) {
+    if (e.length) this.ok(await this.db.from("veille_histoires").insert(e), "enregistrerHistoires");
+  }
   async purger() {
     this.ok(await this.db.rpc("veille_purge"), "purger");
   }
@@ -127,13 +139,13 @@ export class SupabaseStore implements Store {
 
 interface Donnees {
   etat: Record<string, unknown>; articles: (Article & { collecte_le: string })[]; wiki: { article: string; jour: string; vues: number }[];
-  scores: ScoreLigne[]; alertes: Alerte[]; agenda: AgendaLigne[];
+  scores: ScoreLigne[]; alertes: Alerte[]; agenda: AgendaLigne[]; histoires: EmpreinteHistoire[];
 }
 
 export class MemoireStore implements Store {
-  private d: Donnees = { etat: {}, articles: [], wiki: [], scores: [], alertes: [], agenda: [] };
+  private d: Donnees = { etat: {}, articles: [], wiki: [], scores: [], alertes: [], agenda: [], histoires: [] };
   constructor(private fichier?: string) {
-    if (fichier && existsSync(fichier)) this.d = JSON.parse(readFileSync(fichier, "utf8"));
+    if (fichier && existsSync(fichier)) this.d = { ...this.d, ...JSON.parse(readFileSync(fichier, "utf8")) };
   }
   private save() {
     if (!this.fichier) return;
@@ -192,6 +204,10 @@ export class MemoireStore implements Store {
   async enregistrerAgenda(l: AgendaLigne) {
     this.d.agenda = this.d.agenda.filter((x) => x.uid !== l.uid); this.d.agenda.push(l); this.save();
   }
+  async histoiresDepuis(sujetId: string, depuis: Date) {
+    return this.d.histoires.filter((e) => e.sujet_id === sujetId && new Date(e.cree_le) >= depuis);
+  }
+  async enregistrerHistoires(e: EmpreinteHistoire[]) { this.d.histoires.push(...e); this.save(); }
   async purger() {}
 }
 

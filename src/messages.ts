@@ -1,7 +1,8 @@
-import type { Sujet } from "./lib/config.js";
-import { COULEURS, PASTILLE, type Embed } from "./lib/discord.js";
+import type { Config, Sujet } from "./lib/config.js";
+import { COULEURS, LIMITES, PASTILLE, type Embed } from "./lib/discord.js";
+import type { Article } from "./lib/store.js";
 import { formatDateHeure, formatHeure } from "./lib/time.js";
-import type { ScorePresse } from "./scoring.js";
+import { rang, type ScorePresse } from "./scoring.js";
 import type { AnalyseScrutin } from "./sources/an.js";
 import type { Reunion } from "./sources/an.js";
 import type { SignalWiki } from "./sources/wikipedia.js";
@@ -20,28 +21,83 @@ const fr = (x: number) => x.toLocaleString("fr-FR", { maximumFractionDigits: 1 }
 
 const liens = (s: Sujet, extra: string[] = []) => [`[Page du sujet](${s.url})`, ...extra].join(" · ");
 
-export function embedPresse(s: Sujet, sc: ScorePresse): Embed {
-  const niv = sc.niveau ?? "basse";
-  const h = sc.histoires[0];
-  const sources = sc.histoires.flatMap((x) => x.articles).sort((a, b) => b.publie_le.localeCompare(a.publie_le)).slice(0, 4)
-    .map((a) => `• [${a.source_nom || a.source_domaine}](${a.lien}) — ${formatHeure(new Date(a.publie_le))} — ${a.titre}`).join("\n");
-  const ref = `${sc.articlesFenetre} articles en 3 h, ${sc.histoires.length} histoire(s), ${sc.medias.toLocaleString("fr-FR")} média(s) pondérés — ×${fr(sc.ratio)} la normale`
-    + (sc.calibration ? ` _(historique de ${sc.historiqueJours} j : référence peu fiable)_` : "")
+/** Neutralise la mise en forme Markdown d'un texte venu d'une source (titres, noms de médias). */
+export const echapper = (t: string) => t.replace(/([\\*_~`|[\]()>#])/g, "\\$1");
+
+/** Tronque à `n` caractères sur une fin de mot. */
+export function titreCourt(t: string, n: number): string {
+  if (t.length <= n) return t;
+  const c = t.slice(0, n - 1);
+  const k = c.lastIndexOf(" ");
+  return `${(k > n / 2 ? c.slice(0, k) : c).replace(/[\s,;:–-]+$/, "")}…`;
+}
+
+/** Au plus `maxLignes` lignes tenant dans `max` caractères, suivies de « … et N autre(s) » pour le reste. */
+export function lignesBornees(lignes: string[], max: number, maxLignes = lignes.length): string {
+  const out: string[] = [];
+  let t = 0;
+  for (const [i, l] of lignes.entries()) {
+    const reste = lignes.length - i - 1;
+    const suite = reste ? `\n… et ${reste} autre(s)`.length : 0;
+    if (i >= maxLignes || t + l.length + 1 + suite > max) { out.push(`… et ${lignes.length - i} autre(s)`); break; }
+    out.push(l); t += l.length + 1;
+  }
+  return out.join("\n");
+}
+
+const nomMedia = (a: Article) => a.source_nom || a.source_domaine || "?";
+
+/** Volume, médias et comparaison à la normale, avec l'avertissement tant que l'historique est court. */
+export function declencheur(sc: ScorePresse): string {
+  const duree = `${fr(sc.dureeH)} h`;
+  const normale = sc.ratio === null
+    ? "pas encore de normale (aucun jour d'historique)"
+    : `×${fr(sc.ratio)} la normale (${fr(sc.reference ?? 0)} article(s) d'habitude, médiane sur ${sc.joursReference} j)`;
+  return `${sc.articlesFenetre} articles en ${duree}, ${sc.histoires.length} histoire(s), ${fr(sc.medias)} média(s) pondérés dont ${sc.mediasNationaux} nationaux — ${normale}`
+    + (sc.calibration ? ` _(historique de ${sc.joursReference} j : référence peu fiable)_` : "")
     + (sc.bonusWiki ? "\nWikipédia : consultations en hausse" : "");
+}
+
+export function embedPresse(s: Sujet, sc: ScorePresse, cfg: Config): Embed {
+  const niv = sc.niveau ?? "basse";
+  const p = cfg.regles.presse;
+  const h = sc.histoires[0];
+  // L'histoire principale vient en premier : la première source listée est donc celle de « Ce qui se passe ».
+  const lignes = sc.histoires.flatMap((x) => x.articles)
+    .map((a) => `• ${echapper(nomMedia(a))} — ${formatHeure(new Date(a.publie_le))} — ${echapper(titreCourt(a.titre, p.titre_source_max))}`);
+  const lire = h?.lien ? `\n[Lire l'article (${echapper(nomMedia(h.articles[0]))})](${h.lien})` : "";
   return {
     title: `${PASTILLE[niv]} ${s.titre}`,
     url: s.url,
     color: COULEURS[niv],
-    description: h ? `**Ce qui se passe :** ${h.titre}` : undefined,
+    description: h ? `**Ce qui se passe :** ${echapper(h.titre)}${lire}` : undefined,
     fields: [
-      { name: "Déclencheur", value: ref },
-      { name: "Sources", value: sources || "—" },
+      { name: "Déclencheur", value: declencheur(sc) },
+      { name: "Sources", value: lignesBornees(lignes, LIMITES.valeurChamp, p.sources_max_affichees) || "—" },
       { name: "Ta donnée", value: donnee(s) },
       { name: "Liens", value: liens(s) },
     ],
     footer: { text: `presse · ${s.id}` },
   };
 }
+
+/** Récapitulatif du matin : presse parue pendant la nuit, sujet par sujet, comparée à la même plage horaire des jours précédents. */
+export function embedNuit(items: { sujet: Sujet; sc: ScorePresse }[], debut: Date, fin: Date, cfg: Config): Embed {
+  const max = cfg.regles.presse.titre_source_max;
+  const actifs = items.filter((x) => x.sc.articlesFenetre > 0).sort((a, b) => rang(b.sc.niveau) - rang(a.sc.niveau) || b.sc.articlesFenetre - a.sc.articlesFenetre);
+  const lignes = actifs.map(({ sujet, sc }) => {
+    const h = sc.histoires[0];
+    const pastille = sc.niveau ? PASTILLE[sc.niveau] : "•";
+    const principale = h ? `\n  ↳ ${h.lien ? `[${echapper(titreCourt(h.titre, max))}](${h.lien})` : echapper(titreCourt(h.titre, max))}` : "";
+    return `${pastille} **${sujet.titre}** — ${declencheur(sc)}${principale}`;
+  });
+  return {
+    title: `🌙 Presse de la nuit (${formatHeure(debut)} → ${formatHeure(fin)})`,
+    color: COULEURS.info,
+    description: lignes.length ? lignesBornees(lignes, LIMITES.description - 100) : "Aucun article sur les sujets suivis pendant la nuit.",
+  };
+}
+
 
 function ligneGroupe(g: AnalyseScrutin["groupes"][number]): string {
   const marques = [g.decisif ? "D" : "", g.sousParticipation ? "↓" : "", g.ecart ? "⚠" : ""].join("");

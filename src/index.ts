@@ -1,12 +1,12 @@
 import { env, loadConfig, type Config, type Sujet } from "./lib/config.js";
-import { creerStore, type Store } from "./lib/store.js";
-import { enPlageSilencieuse, formatDateHeure, minutesParis, parisParts } from "./lib/time.js";
+import { creerStore, type ScoreLigne, type Store } from "./lib/store.js";
+import { enPlageSilencieuse, formatDateHeure, heures, minutesParis, parisParts } from "./lib/time.js";
 import { envoyer, COULEURS, type Embed } from "./lib/discord.js";
 import { collecterGoogleNews } from "./sources/gnews.js";
 import { collecterWikipedia, type SignalWiki } from "./sources/wikipedia.js";
 import { collecterAgenda, collecterScrutins, type Reunion } from "./sources/an.js";
-import { scorerPresse, rang } from "./scoring.js";
-import { embedAgenda, embedBudget, embedPresse, embedTech, embedVote, embedWiki, niveauVote, type Seance } from "./messages.js";
+import { debutNuit, empreinte, rang, retirerDejaSignalees, scorerNuit, scorerPresse, type ScorePresse } from "./scoring.js";
+import { embedAgenda, embedBudget, embedNuit, embedPresse, embedTech, embedVote, embedWiki, niveauVote, type Seance } from "./messages.js";
 import { publier } from "./alerts.js";
 
 const erreurs: string[] = [];
@@ -42,25 +42,38 @@ async function tachePresse(cfg: Config, store: Store, now: Date, jour: string) {
   const bonus = await store.lireEtat<{ jour: string; sujets: string[] }>("wiki_bonus");
   const depuis = new Date(now.getTime() - (cfg.regles.presse.jours_reference + 1) * 86400_000);
   const creneau = new Date(Math.floor(now.getTime() / 1_800_000) * 1_800_000).toISOString();
-  const scores = [];
+  const scores: ScoreLigne[] = [];
   for (const sujet of cfg.sujets) {
     const arts = await store.articlesDepuis(sujet.id, depuis);
-    const sc = scorerPresse(arts, now, cfg, bonus?.jour === jour && bonus.sujets.includes(sujet.id), await store.premierArticle(sujet.id));
-    scores.push({ sujet_id: sujet.id, articles_fenetre: sc.articlesFenetre, histoires: sc.histoires.length, medias: sc.medias,
-      reference: sc.reference, ratio: Number(sc.ratio.toFixed(2)), bonus_wiki: sc.bonusWiki, historique_jours: sc.historiqueJours, niveau: sc.niveau });
-    if (!sc.niveau || sc.niveau === "basse") continue; // le seul bonus Wikipédia est déjà signalé par la tâche Wikipédia
+    const brut = scorerPresse(arts, now, cfg, bonus?.jour === jour && bonus.sujets.includes(sujet.id), await store.premierArticle(sujet.id));
+    scores.push(ligneScore(sujet.id, brut));
+    if (!brut.niveau || brut.niveau === "basse") continue; // le seul bonus Wikipédia est déjà signalé par la tâche Wikipédia
+    const recentes = await store.histoiresDepuis(sujet.id, new Date(now.getTime() - heures(cfg.regles.presse.dedoublonnage.duree_heures)));
+    const { score: sc, retirees } = retirerDejaSignalees(brut, recentes, sujet, cfg);
+    if (retirees.length) info(`  ${sujet.id} : ${retirees.length} histoire(s) déjà signalée(s) écartée(s) — ${retirees.map((h) => `« ${h.titre.slice(0, 60)} »`).join(", ")}`);
+    if (!sc.niveau || sc.niveau === "basse") { info(`  ${sujet.id} : niveau ${brut.niveau} dû à des histoires déjà signalées → pas d'alerte`); continue; }
+    const cle = `presse:${sujet.id}:${creneau}`;
     const issue = await publier({
-      cle: `presse:${sujet.id}:${creneau}`, sujet, type: "presse", niveau: sc.niveau, embeds: [embedPresse(sujet, sc)],
+      cle, sujet, type: "presse", niveau: sc.niveau, embeds: [embedPresse(sujet, sc, cfg)],
       dernier: sc.histoires.map((h) => h.dernier).sort().at(-1),
     }, cfg, store, now);
+    if (issue === "envoyee" || issue === "modifiee" || issue === "en_attente")
+      await store.enregistrerHistoires(sc.histoires.map((h) => empreinte(h, sujet, sc.niveau!, cle, now, cfg)));
     info(`  ${sujet.id} : niveau ${sc.niveau} → ${issue}`);
   }
   await store.ajouterScores(scores);
 }
 
+const arrondi = (x: number | null) => (x === null ? null : Number(x.toFixed(2)));
+function ligneScore(sujetId: string, sc: ScorePresse): ScoreLigne {
+  return { sujet_id: sujetId, articles_fenetre: sc.articlesFenetre, histoires: sc.histoires.length, medias: sc.medias, medias_nationaux: sc.mediasNationaux,
+    reference: arrondi(sc.reference), jours_reference: sc.joursReference, ratio: arrondi(sc.ratio), bonus_wiki: sc.bonusWiki,
+    historique_jours: sc.historiqueJours, niveau: sc.niveau };
+}
+
 /* ---------- Scrutins : chaque passage, téléchargement seulement si le fichier a changé ---------- */
 async function tacheScrutins(cfg: Config, store: Store, now: Date, jour: string) {
-  const res = await collecterScrutins(cfg, store);
+  const res = await collecterScrutins(cfg, store, info);
   if (res.inchange) { info("  Scrutins : fichier inchangé"); return; }
   const premier = !(await store.lireEtat<boolean>("scrutins_initialise"));
   for (const { sujet, analyse } of res.analyses) {
@@ -83,7 +96,7 @@ async function tacheAgenda(cfg: Config, store: Store, now: Date, jour: string) {
   const h = parisParts(now, cfg.regles.fuseau).h;
   const creneau = h >= 14 ? `${jour}-14` : h >= 8 ? `${jour}-8` : null;
   if (!force("agenda") && (!creneau || (await store.lireEtat<string>("agenda_creneau")) === creneau)) return;
-  const evts = await collecterAgenda(cfg, store);
+  const evts = await collecterAgenda(cfg, store, info);
   if (evts === null) { info("  Agenda : fichier inchangé"); }
   else {
     const premier = !(await store.lireEtat<boolean>("agenda_initialise"));
@@ -135,11 +148,15 @@ async function tacheRecap(cfg: Config, store: Store, now: Date, jour: string) {
   const auj = (await store.agendaTous()).filter((a) => a.sujets.length && parisParts(new Date(a.debut), cfg.regles.fuseau).jour === jour)
     .sort((a, b) => a.debut.localeCompare(b.debut));
   const compte = (n: string) => garder.filter((a) => a.niveau === n).length;
+  const nuit = await presseDeLaNuit(cfg, store, now);
+  const signauxNuit = nuit.filter((x) => x.sc.niveau === "haute" || x.sc.niveau === "moyenne");
   const entete: Embed = {
     title: `☀️ Récapitulatif du ${jour.split("-").reverse().join("/")}`,
     color: COULEURS.info,
     description: [
-      garder.length ? `Alertes en attente : ${compte("haute")} haute(s), ${compte("moyenne")} moyenne(s), ${compte("basse")} basse(s), ${compte("info")} information(s).` : "Rien à signaler depuis hier soir.",
+      garder.length ? `Alertes en attente : ${compte("haute")} haute(s), ${compte("moyenne")} moyenne(s), ${compte("basse")} basse(s), ${compte("info")} information(s).`
+        : signauxNuit.length ? "Pas d'alerte en attente." : "Rien à signaler depuis hier soir.",
+      signauxNuit.length ? `Presse de la nuit en hausse sur ${signauxNuit.length} sujet(s) : ${signauxNuit.map((x) => x.sujet.id).join(", ")} (détail ci-dessous).` : "",
       auj.length ? `\n**Aujourd'hui à l'Assemblée :**\n${auj.map((a) => `• ${formatDateHeure(new Date(a.debut))} — ${a.type === "seance" ? "séance" : "commission"} — sujets : ${a.sujets.join(", ")}`).join("\n")}` : "",
       aEcarter.length ? `\n_${aEcarter.length} alerte(s) presse de plus de ${cfg.regles.garde_fous.peremption_recap_heures} h écartée(s)._` : "",
     ].filter(Boolean).join("\n"),
@@ -147,12 +164,31 @@ async function tacheRecap(cfg: Config, store: Store, now: Date, jour: string) {
   // Les séances budgétaires sont regroupées en un seul encadré au lieu d'un par séance.
   const budgets = garder.filter((a) => a.type === "budget" && a.payload.seance);
   const autres = garder.filter((a) => !budgets.includes(a));
-  const embeds = [entete, ...(budgets.length ? [embedBudget(budgets.map((a) => a.payload.seance as Seance))] : []),
+  const embeds = [entete, embedNuit(nuit, debutNuit(now, cfg), now, cfg), ...(budgets.length ? [embedBudget(budgets.map((a) => a.payload.seance as Seance))] : []),
     ...autres.flatMap((a) => (a.payload.embeds as Embed[]) ?? [])];
-  await envoyer(embeds, garder.some((a) => a.niveau === "haute"));
+  await envoyer(embeds, garder.some((a) => a.niveau === "haute") || signauxNuit.some((x) => x.sc.niveau === "haute"));
   await store.marquerAlertes(garder.map((a) => a.cle), "envoyee");
   await store.marquerAlertes(aEcarter.map((a) => a.cle), "ecartee");
+  // Les histoires de la nuit signalées ici ne redéclenchent pas d'alerte dans la journée (déduplication).
+  for (const { sujet, sc } of signauxNuit)
+    await store.enregistrerHistoires(sc.histoires.map((h) => empreinte(h, sujet, sc.niveau!, `nuit:${jour}`, now, cfg)));
   await store.ecrireEtat("recap_jour", jour);
+}
+
+/**
+ * Angle mort de nuit : le bot ne tourne pas entre 21 h et le premier passage du matin. Au récapitulatif,
+ * la presse est évaluée sur toute la nuit (veille à nuit.heure_debut → maintenant), comparée à la même plage
+ * horaire des jours précédents. Les articles de la nuit ont été collectés juste avant par la tâche Google News.
+ */
+async function presseDeLaNuit(cfg: Config, store: Store, now: Date): Promise<{ sujet: Sujet; sc: ScorePresse }[]> {
+  const depuis = new Date(debutNuit(now, cfg).getTime() - (cfg.regles.presse.jours_reference + 1) * 86400_000);
+  const out: { sujet: Sujet; sc: ScorePresse }[] = [];
+  for (const sujet of cfg.sujets) {
+    const sc = scorerNuit(await store.articlesDepuis(sujet.id, depuis), now, cfg, await store.premierArticle(sujet.id));
+    out.push({ sujet, sc });
+    info(`  Nuit — ${sujet.id} : ${sc.articlesFenetre} article(s), normale ${sc.reference ?? "—"} sur ${sc.joursReference} j, niveau ${sc.niveau ?? "aucun"}`);
+  }
+  return out;
 }
 
 /* ---------- Programme principal ---------- */

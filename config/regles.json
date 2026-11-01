@@ -6,18 +6,29 @@
   "presse": {
     "fenetre_heures": 3,
     "jours_reference": 14,
+    "_reference": "La normale est la médiane des seuls jours couverts par l'historique. reference_min : plancher de la normale. reference_sans_historique : normale utilisée quand aucun jour n'est disponible ; null = pas d'alerte presse tant qu'il n'y a pas au moins un jour d'historique.",
+    "reference_min": 1,
+    "reference_sans_historique": null,
     "fraicheur_max_heures": 6,
-    "haute": { "medias_min": 3, "ratio_min": 3 },
-    "moyenne": { "histoires_min": 2, "ratio_min": 2 },
+    "haute": { "medias_ponderes_min": 5, "medias_nationaux_min": 2, "ratio_min": 3 },
+    "moyenne": { "histoires_min": 2, "medias_ponderes_min": 2, "ratio_min": 2 },
     "similarite_titres": 0.5,
     "filtrer_par_titre": true,
-    "historique_min_jours": 7
+    "historique_min_jours": 7,
+    "_nuit": "Au récapitulatif du matin, la presse est évaluée depuis la veille à heure_debut, comparée à la même plage horaire des jours précédents.",
+    "nuit": { "heure_debut": 21 },
+    "_dedoublonnage": "Une histoire déjà signalée ne redéclenche pas d'alerte pendant duree_heures, sauf niveau supérieur ou médias pondérés multipliés par hausse_medias_ratio. Deux histoires sont identiques si elles partagent un article, ou au moins mots_communs_min mots distinctifs représentant au moins similarite_min de la plus petite empreinte.",
+    "dedoublonnage": { "duree_heures": 24, "similarite_min": 0.5, "mots_communs_min": 2, "hausse_medias_ratio": 2 },
+    "sources_max_affichees": 12,
+    "titre_source_max": 90
   },
   "wikipedia": { "ratio_min": 2, "jours_reference": 28 },
   "garde_fous": {
     "delai_meme_sujet_heures": 6,
     "mentions_max_par_jour": 5,
-    "peremption_recap_heures": 12
+    "peremption_recap_heures": 12,
+    "_escalade": "Rouge après un orange envoyé sur le même sujet il y a moins de delai_heures : pas de mention ; si modifier_message, le message orange est remplacé par le rouge.",
+    "escalade": { "delai_heures": 2, "modifier_message": true }
   },
   "agenda": {
     "horizon_jours": 21,
@@ -27,5 +38,13 @@
   "scrutins": {
     "jours_reference_participation": 120,
     "seuil_sous_participation": 0.5
+  },
+  "_reseau": "Délais en millisecondes. relances = tentatives supplémentaires après la première ; attente avant la relance n : backoff_ms × 2^(n-1).",
+  "reseau": {
+    "timeout_ms": 20000,
+    "timeout_telechargement_ms": 120000,
+    "relances": 2,
+    "backoff_ms": 2000,
+    "gnews_delai_ms": 2000
   }
 }

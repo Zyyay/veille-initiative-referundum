@@ -9,6 +9,7 @@
     "veille:dry": "tsx scripts/veille-dry.ts",
     "test:discord": "tsx scripts/test-discord.ts",
     "test:sources": "tsx scripts/test-sources.ts",
+    "test:scrutins": "tsx scripts/verifier-scrutins.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "groupes": "tsx scripts/lister-groupes.ts",

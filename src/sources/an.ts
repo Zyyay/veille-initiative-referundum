@@ -1,6 +1,6 @@
 import AdmZip from "adm-zip";
 import type { Config, Sujet } from "../lib/config.js";
-import { telechargerSiModifie, type Validateurs } from "../lib/http.js";
+import { decrireTelechargement, telechargerSiModifie, type Validateurs } from "../lib/http.js";
 import { rattacher, normaliser } from "../lib/text.js";
 import type { Store } from "../lib/store.js";
 
@@ -132,10 +132,11 @@ export function analyserScrutin(sc: ScrutinBrut, sujet: Sujet, cfg: Config, moye
 
 export interface ResultatScrutins { analyses: { sujet: Sujet; analyse: AnalyseScrutin }[]; refsInconnues: string[]; inchange: boolean }
 
-export async function collecterScrutins(cfg: Config, store: Store, joursRecents = 3): Promise<ResultatScrutins> {
+export async function collecterScrutins(cfg: Config, store: Store, journal: (m: string) => void, joursRecents = 3): Promise<ResultatScrutins> {
   const cle = "an_scrutins_validateurs";
   const dl = await telechargerSiModifie(cfg.sources.an_scrutins_zip, await store.lireEtat<Validateurs>(cle));
-  if (!dl) return { analyses: [], refsInconnues: [], inchange: true };
+  journal(`  Scrutins : téléchargement ${decrireTelechargement(dl)}`);
+  if (!dl.contenu) return { analyses: [], refsInconnues: [], inchange: true };
   const tous = lireZip(dl.contenu).map(extraireScrutin).filter((x): x is ScrutinBrut => !!x);
   const now = Date.now();
   const ref = tous.filter((s) => now - +new Date(s.date) < cfg.regles.scrutins.jours_reference_participation * 86400_000);
@@ -180,10 +181,11 @@ export const estBudgetaire = (t: string) => BUDGET.test(normaliser(t));
 
 export interface EvenementAgenda { reunion: Reunion; sujets: Sujet[]; budget: boolean }
 
-export async function collecterAgenda(cfg: Config, store: Store): Promise<EvenementAgenda[] | null> {
+export async function collecterAgenda(cfg: Config, store: Store, journal: (m: string) => void): Promise<EvenementAgenda[] | null> {
   const cle = "an_agenda_validateurs";
   const dl = await telechargerSiModifie(cfg.sources.an_agenda_zip, await store.lireEtat<Validateurs>(cle));
-  if (!dl) return null;
+  journal(`  Agenda : téléchargement ${decrireTelechargement(dl)}`);
+  if (!dl.contenu) return null;
   const now = Date.now();
   const horizon = now + cfg.regles.agenda.horizon_jours * 86400_000;
   const evts: EvenementAgenda[] = [];

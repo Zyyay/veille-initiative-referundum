@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { configurerReseau } from "./http.js";
 
 export type Position = "pour" | "contre" | "non_declaree";
 
@@ -24,20 +25,36 @@ export interface Regles {
   presse: {
     fenetre_heures: number;
     jours_reference: number;
+    reference_min: number;
+    reference_sans_historique: number | null;
     fraicheur_max_heures: number;
-    haute: { medias_min: number; ratio_min: number };
-    moyenne: { histoires_min: number; ratio_min: number };
+    haute: { medias_ponderes_min: number; medias_nationaux_min: number; ratio_min: number };
+    moyenne: { histoires_min: number; medias_ponderes_min: number; ratio_min: number };
     similarite_titres: number;
     filtrer_par_titre: boolean;
     historique_min_jours: number;
+    nuit: { heure_debut: number };
+    dedoublonnage: { duree_heures: number; similarite_min: number; mots_communs_min: number; hausse_medias_ratio: number };
+    sources_max_affichees: number;
+    titre_source_max: number;
   };
   wikipedia: { ratio_min: number; jours_reference: number };
-  garde_fous: { delai_meme_sujet_heures: number; mentions_max_par_jour: number; peremption_recap_heures: number };
+  garde_fous: {
+    delai_meme_sujet_heures: number; mentions_max_par_jour: number; peremption_recap_heures: number;
+    escalade: { delai_heures: number; modifier_message: boolean };
+  };
   agenda: { horizon_jours: number; rappel_minutes_avant: number; exclure_textes_budgetaires: boolean };
   scrutins: { jours_reference_participation: number; seuil_sous_participation: number };
+  reseau: Reseau;
 }
 
-export interface Medias { medias_nationaux: string[]; domaines_exclus: string[] }
+export interface Reseau { timeout_ms: number; timeout_telechargement_ms: number; relances: number; backoff_ms: number; gnews_delai_ms: number }
+
+export interface Medias {
+  medias_nationaux: string[]; domaines_exclus: string[]; suffixes_exclus: string[];
+  liste_blanche_active: boolean; liste_blanche: string[];
+  poids: { nationaux: number; autres: number; hors_liste_blanche: number };
+}
 export interface Sources { an_scrutins_zip: string; an_agenda_zip: string; an_page_scrutin: string; an_page_reunion: string }
 
 export interface Config {
@@ -62,9 +79,11 @@ export function loadConfig(): Config {
     if (!s.termes_forts?.length && (s.termes_faibles?.length ?? 0) < 2)
       throw new Error(`Sujet ${s.id} : il faut au moins un terme fort ou deux termes faibles`);
   }
+  const regles = read<Regles>("regles.json");
+  configurerReseau(regles.reseau);
   return {
     sujets,
-    regles: read<Regles>("regles.json"),
+    regles,
     medias: read<Medias>("medias.json"),
     groupes: read<{ groupes: Record<string, string> }>("groupes.json").groupes,
     sources: read<Sources>("sources.json"),

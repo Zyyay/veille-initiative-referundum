@@ -41,3 +41,8 @@ export function mediane(xs: number[]): number {
   const k = Math.floor(s.length / 2);
   return s.length % 2 ? s[k] : (s[k - 1] + s[k]) / 2;
 }
+
+/** Minuit (heure de Paris) du jour en cours. */
+export function minuitParis(now: Date): Date {
+  return new Date(now.getTime() - minutesParis(now) * 60_000 - now.getUTCSeconds() * 1000 - now.getUTCMilliseconds());
+}
