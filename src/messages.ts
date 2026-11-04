@@ -19,7 +19,16 @@ export function donnee(s: Sujet): string {
 
 const fr = (x: number) => x.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
 
-const liens = (s: Sujet, extra: string[] = []) => [`[Page du sujet](${s.url})`, ...extra].join(" · ");
+/** Tag affiché sur toutes les alertes des sujets d'opportunité (pas encore de page sur le site). */
+export const TAG_A_CREER = "🏷️ A Creer";
+
+/** Titre du sujet tel qu'affiché dans Discord : préfixé du tag « A Creer » pour les sujets d'opportunité. */
+export const titreSujet = (s: Sujet) => (s.categorie === "opportunite" ? `${TAG_A_CREER} · ${s.titre}` : s.titre);
+
+/** Lien vers la page du sujet, absent tant que la page n'existe pas (url vide). */
+const pageSujet = (s: Sujet) => (s.url ? [`[Page du sujet](${s.url})`] : []);
+
+const liens = (s: Sujet, extra: string[] = []) => [...pageSujet(s), ...extra].join(" · ") || "—";
 
 /** Neutralise la mise en forme Markdown d'un texte venu d'une source (titres, noms de médias). */
 export const echapper = (t: string) => t.replace(/([\\*_~`|[\]()>#])/g, "\\$1");
@@ -67,8 +76,8 @@ export function embedPresse(s: Sujet, sc: ScorePresse, cfg: Config): Embed {
     .map((a) => `• ${echapper(nomMedia(a))} — ${formatHeure(new Date(a.publie_le))} — ${echapper(titreCourt(a.titre, p.titre_source_max))}`);
   const lire = h?.lien ? `\n[Lire l'article (${echapper(nomMedia(h.articles[0]))})](${h.lien})` : "";
   return {
-    title: `${PASTILLE[niv]} ${s.titre}`,
-    url: s.url,
+    title: `${PASTILLE[niv]} ${titreSujet(s)}`,
+    url: s.url || undefined,
     color: COULEURS[niv],
     description: h ? `**Ce qui se passe :** ${echapper(h.titre)}${lire}` : undefined,
     fields: [
@@ -89,7 +98,7 @@ export function embedNuit(items: { sujet: Sujet; sc: ScorePresse }[], debut: Dat
     const h = sc.histoires[0];
     const pastille = sc.niveau ? PASTILLE[sc.niveau] : "•";
     const principale = h ? `\n  ↳ ${h.lien ? `[${echapper(titreCourt(h.titre, max))}](${h.lien})` : echapper(titreCourt(h.titre, max))}` : "";
-    return `${pastille} **${sujet.titre}** — ${declencheur(sc)}${principale}`;
+    return `${pastille} **${titreSujet(sujet)}** — ${declencheur(sc)}${principale}`;
   });
   return {
     title: `🌙 Presse de la nuit (${formatHeure(debut)} → ${formatHeure(fin)})`,
@@ -122,7 +131,7 @@ export function embedVote(s: Sujet, a: AnalyseScrutin): Embed {
   }).join("\n");
   const dissidents = a.groupes.filter((g) => g.dissidents > 0).map((g) => `${g.sigle} (${g.dissidents})`).join(", ");
   return {
-    title: `${PASTILLE[niv]} Vote — ${s.titre}`,
+    title: `${PASTILLE[niv]} Vote — ${titreSujet(s)}`,
     url: a.lien,
     color: COULEURS[niv],
     description: `**${a.adopte ? "Adopté" : "Rejeté"}** (${a.pour} pour, ${a.contre} contre, ${a.abstentions} abst.) — ${a.typeVote || "scrutin public"} du ${a.date}\n${a.titre}`,
@@ -162,7 +171,7 @@ export function embedAgenda(sujets: Sujet[], r: Reunion, nature: "nouveau" | "mo
     description: `**${formatDateHeure(new Date(r.debut))}** — ${r.type === "seance" ? "séance publique" : r.type === "commission" ? "commission" : "réunion"}${r.lieu ? `, ${r.lieu}` : ""}${r.etat ? ` — état : ${r.etat}` : ""}`,
     fields: [
       { name: "Ordre du jour", value: r.objet },
-      ...sujets.map((s) => ({ name: `Sujet : ${s.titre}`, value: `${donnee(s)}\n[Page du sujet](${s.url})` })),
+      ...sujets.map((s) => ({ name: `Sujet : ${titreSujet(s)}`, value: [donnee(s), ...pageSujet(s)].join("\n") })),
       { name: "Liens", value: `[Agenda de l'Assemblée](${lien})` },
     ],
     footer: { text: `agenda · ${r.uid}` },
@@ -171,7 +180,7 @@ export function embedAgenda(sujets: Sujet[], r: Reunion, nature: "nouveau" | "mo
 
 export function embedWiki(s: Sujet, w: SignalWiki): Embed {
   return {
-    title: `${PASTILLE.basse} Intérêt en hausse sur Wikipédia — ${s.titre}`,
+    title: `${PASTILLE.basse} Intérêt en hausse sur Wikipédia — ${titreSujet(s)}`,
     url: `https://fr.wikipedia.org/wiki/${encodeURIComponent(w.article.replace(/ /g, "_"))}`,
     color: COULEURS.basse,
     description: `« ${w.article} » : ${w.vues.toLocaleString("fr-FR")} consultations le ${w.jour}, ×${fr(w.ratio)} la médiane (${Math.round(w.reference)}).`,

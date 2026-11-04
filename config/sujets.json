@@ -1,5 +1,5 @@
 {
-  "_lisez_moi": "Un objet par sujet, généré depuis l'export de la table subjects. Seuls les sujets en actif: true sont surveillés. positions_declarees : sigles de config/groupes.json, position pour | contre | non_declaree, avec source et date. Termes : comparés sans accents ni majuscules, sur des mots entiers ; la presse est filtrée sur le titre (1 terme fort ou 2 termes faibles).",
+  "_lisez_moi": "Un objet par sujet, généré depuis l'export de la table subjects. Seuls les sujets en actif: true sont surveillés. positions_declarees : sigles de config/groupes.json, position pour | contre | non_declaree, avec source et date. Termes : comparés sans accents ni majuscules, sur des mots entiers ; la presse est filtrée sur le titre (1 terme fort ou 2 termes faibles). categorie : absent ou « site » pour les sujets du site ; « opportunite » pour les sujets à créer (url vide autorisée), signalés par le tag « A Creer » dans Discord. Les champs préfixés _ sont des notes ignorées par le bot.",
   "sujets": [
     {
       "id": "zfe",
@@ -936,6 +936,415 @@
         "Surpopulation carcérale"
       ],
       "positions_declarees": {}
+    },
+    {
+      "id": "isf",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il rétablir l'impôt sur la fortune ou taxer davantage les très hauts patrimoines ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 86,
+        "institut": "Ifop",
+        "date": "09/2025",
+        "url": "https://www.ifop.com/wp-content/uploads/2025/09/121870-resultats-mesures-ps.pdf",
+        "question": "Êtes-vous favorable à un impôt de 2 % sur les patrimoines de plus de 100 M€ (taxe Zucman) ?"
+      },
+      "requetes_gnews": [
+        "ISF OR \"impôt sur la fortune\" OR \"taxe Zucman\" OR \"impôt plancher\" OR ultra-riches"
+      ],
+      "termes_forts": [
+        "ISF",
+        "impôt sur la fortune",
+        "taxe Zucman",
+        "impôt plancher",
+        "ultra-riches"
+      ],
+      "termes_faibles": [
+        "milliardaires",
+        "hauts patrimoines",
+        "IFI",
+        "fortune",
+        "grandes fortunes"
+      ],
+      "termes_legislatifs": [
+        "impôt sur la fortune",
+        "impôt sur la fortune immobilière"
+      ],
+      "wikipedia": [
+        "Impôt de solidarité sur la fortune"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop 2022 : 79 % pour rétablir l'ISF",
+        "Elabe 04/2024 : 76 %",
+        "Ifop 09/2025 : 86 % taxe Zucman"
+      ],
+      "_statut_politique_publique": "ISF supprimé en 2018 ; taxe Zucman rejetée au Parlement."
+    },
+    {
+      "id": "indexation-salaires",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il indexer les salaires sur l'inflation ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 87,
+        "institut": "Ifop",
+        "date": "10/2022",
+        "url": "https://www.ifop.com/wp-content/uploads/2022/10/119541-Rapport.pdf",
+        "question": "Les salaires devraient-ils être indexés sur l'inflation comme jusqu'en 1982 ?"
+      },
+      "requetes_gnews": [
+        "\"indexation des salaires\" OR \"échelle mobile des salaires\" OR \"indexer les salaires\""
+      ],
+      "termes_forts": [
+        "indexation des salaires",
+        "échelle mobile des salaires",
+        "indexer les salaires"
+      ],
+      "termes_faibles": [
+        "inflation",
+        "salaires",
+        "pouvoir d'achat",
+        "SMIC",
+        "hausse des prix"
+      ],
+      "termes_legislatifs": [
+        "indexation des salaires"
+      ],
+      "wikipedia": [
+        "Échelle mobile des salaires"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop 10/2022 : 87 %",
+        "Toluna Harris 11/2023 : 92 % (commande LFI) https://tolunacorporate.com/wp-content/uploads/2025/05/Rapport-Toluna-Harris-Niche-parlementaire-Novembre-2023-LFI.pdf"
+      ],
+      "_statut_politique_publique": "Seul le SMIC est indexé."
+    },
+    {
+      "id": "elevage-intensif",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il interdire l'élevage intensif et l'élevage en cage ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 89,
+        "institut": "Ifop",
+        "date": "02/2025",
+        "url": "https://www.ifop.com/wp-content/uploads/2025/02/IFOP121283-Presentation-F30MA.pdf",
+        "question": "Favorable à la fin de l'élevage en cage ?"
+      },
+      "requetes_gnews": [
+        "\"élevage intensif\" OR \"élevage en cage\" OR fermes-usines OR \"poules en cage\""
+      ],
+      "termes_forts": [
+        "élevage intensif",
+        "élevage en cage",
+        "fermes-usines",
+        "poules en cage"
+      ],
+      "termes_faibles": [
+        "élevage",
+        "bien-être animal",
+        "abattoirs",
+        "L214"
+      ],
+      "termes_legislatifs": [
+        "bien-être animal",
+        "élevage"
+      ],
+      "wikipedia": [
+        "Élevage intensif"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop/30MA 01/2022 : 85 % interdiction élevage intensif",
+        "Ifop 02/2023 : 83 %",
+        "Ifop 2025 : 89 % fin des cages"
+      ],
+      "_statut_politique_publique": "Seuls les nouveaux élevages de poules en cage sont interdits (EGalim)."
+    },
+    {
+      "id": "chasse-dimanche",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il instaurer des journées sans chasse (dimanche) ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 78,
+        "institut": "Ifop",
+        "date": "01/2023",
+        "url": "https://reporterre.net/Huit-personnes-sondees-sur-dix-souhaitent-l-interdiction-de-la-chasse-le"
+      },
+      "requetes_gnews": [
+        "\"chasse le dimanche\" OR \"journée sans chasse\" OR \"jour sans chasse\" OR \"dimanche sans chasse\""
+      ],
+      "termes_forts": [
+        "chasse le dimanche",
+        "journée sans chasse",
+        "jour sans chasse",
+        "dimanche sans chasse"
+      ],
+      "termes_faibles": [
+        "chasseurs",
+        "chasse",
+        "accidents de chasse",
+        "promeneurs"
+      ],
+      "termes_legislatifs": [
+        "exercice de la chasse"
+      ],
+      "wikipedia": [
+        "Chasse en France"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop 2021 : niveau équivalent (~78-80 %, chiffre exact à lire dans https://www.ifop.com/wp-content/uploads/2021/01/IFOP117840-Présentation-30MA.pdf)",
+        "Ifop 01/2023 : 78 %"
+      ],
+      "_statut_politique_publique": "Aucun jour sans chasse national."
+    },
+    {
+      "id": "chasse-a-courre",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il interdire la chasse à courre ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 79,
+        "institut": "Ifop",
+        "date": "01/2024",
+        "url": "https://www.ifop.com/wp-content/uploads/2024/02/IFOP120567-Presentation-30MA-29.01.2024.pdf"
+      },
+      "requetes_gnews": [
+        "\"chasse à courre\" OR vénerie OR déterrage"
+      ],
+      "termes_forts": [
+        "chasse à courre",
+        "vénerie",
+        "déterrage"
+      ],
+      "termes_faibles": [
+        "chasse",
+        "chasseurs",
+        "cerf",
+        "bien-être animal"
+      ],
+      "termes_legislatifs": [
+        "chasse à courre",
+        "vénerie"
+      ],
+      "wikipedia": [
+        "Chasse à courre"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ipsos/One Voice 2023 : 83 % https://www.ipsos.com/fr-fr/les-francais-rejettent-massivement-la-chasse",
+        "Ifop/30MA 01/2024 : 79 %"
+      ],
+      "_statut_politique_publique": "Autorisée ; PPL d'interdiction non adoptées."
+    },
+    {
+      "id": "majorite-penale",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il juger les mineurs de 16 ans auteurs de crimes graves comme des majeurs ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 83,
+        "institut": "Statista (institut à confirmer)",
+        "date": "2025",
+        "url": "https://fr.statista.com/statistiques/678664/age-emprisonnement-mineur-opinion-publique-sensibilite-politique-france"
+      },
+      "requetes_gnews": [
+        "\"majorité pénale\" OR \"excuse de minorité\" OR \"justice des mineurs\" OR \"comparution immédiate des mineurs\""
+      ],
+      "termes_forts": [
+        "majorité pénale",
+        "excuse de minorité",
+        "justice des mineurs",
+        "comparution immédiate des mineurs"
+      ],
+      "termes_faibles": [
+        "mineurs",
+        "délinquance juvénile",
+        "16 ans",
+        "tribunal pour enfants"
+      ],
+      "termes_legislatifs": [
+        "justice pénale des mineurs",
+        "excuse de minorité"
+      ],
+      "wikipedia": [
+        "Justice des mineurs en France"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "CSA/CNews 09/2022 : 71 % pour lever l'excuse de minorité pour les faits graves",
+        "Sondage 2025 (Statista) : 83 % majorité pénale à 16 ans"
+      ],
+      "_statut_politique_publique": "Loi Attal 2025 partiellement censurée par le Conseil constitutionnel — à revérifier."
+    },
+    {
+      "id": "pesticides",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il interdire le glyphosate et les néonicotinoïdes ?",
+      "url": "",
+      "donnee": {
+        "adhesion": null,
+        "institut": "",
+        "date": "",
+        "url": ""
+      },
+      "requetes_gnews": [
+        "glyphosate OR néonicotinoïdes OR acétamipride OR \"loi Duplomb\""
+      ],
+      "termes_forts": [
+        "glyphosate",
+        "néonicotinoïdes",
+        "acétamipride",
+        "loi Duplomb"
+      ],
+      "termes_faibles": [
+        "pesticides",
+        "agriculteurs",
+        "biodiversité",
+        "phytosanitaires"
+      ],
+      "termes_legislatifs": [
+        "produits phytopharmaceutiques"
+      ],
+      "wikipedia": [
+        "Glyphosate"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Générations Futures 09/2021 : 74 % contre le renouvellement du glyphosate",
+        "Sondage 2025 : 8 sur 10 contre le retour des néonicotinoïdes https://reporterre.net/Huit-Francais-sur-dix-s-opposent-au-retour-des-neonicotinoides-34523"
+      ],
+      "_statut_politique_publique": "Glyphosate autorisé (UE) ; acétamipride censuré en 2025."
+    },
+    {
+      "id": "peines-planchers",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il rétablir les peines planchers pour les récidivistes ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 82,
+        "institut": "CSA",
+        "date": "à dater",
+        "url": "https://www.europe1.fr/politique/sondage-82-des-francais-veulent-le-retablissement-des-peines-planchers-4268667"
+      },
+      "requetes_gnews": [
+        "\"peines planchers\" OR \"peine plancher\" OR \"peines minimales\""
+      ],
+      "termes_forts": [
+        "peines planchers",
+        "peine plancher",
+        "peines minimales"
+      ],
+      "termes_faibles": [
+        "récidive",
+        "récidivistes",
+        "magistrats",
+        "sanctions"
+      ],
+      "termes_legislatifs": [
+        "peine minimale",
+        "récidive"
+      ],
+      "wikipedia": [
+        "Peine plancher"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "CSA/Europe 1-CNews-JDD : 82 % (date à confirmer)"
+      ],
+      "_statut_politique_publique": "Abrogées en 2014 ; projet de rétablissement en débat — à revérifier."
+    },
+    {
+      "id": "vote-blanc",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il reconnaître le vote blanc comme un suffrage exprimé ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 80,
+        "institut": "Ifop",
+        "date": "06/2021",
+        "url": "https://www.macommune.info/36-des-francais-disent-vouloir-aller-voter-dimanche-les-electeurs-pour-la-prise-en-compte-du-vote-blanc/"
+      },
+      "requetes_gnews": [
+        "\"vote blanc\" OR \"bulletin blanc\" OR \"votes blancs\""
+      ],
+      "termes_forts": [
+        "vote blanc",
+        "bulletin blanc",
+        "votes blancs"
+      ],
+      "termes_faibles": [
+        "abstention",
+        "suffrages exprimés",
+        "élection",
+        "bulletin"
+      ],
+      "termes_legislatifs": [
+        "vote blanc",
+        "suffrages exprimés"
+      ],
+      "wikipedia": [
+        "Vote blanc"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop/JDD 06/2021 : 80 %",
+        "(Ifop 2017 : 86 %, avant 2020)"
+      ],
+      "_statut_politique_publique": "Non compté dans les suffrages exprimés."
+    },
+    {
+      "id": "superprofits",
+      "actif": true,
+      "categorie": "opportunite",
+      "titre": "Faut-il taxer les superprofits des grandes entreprises ?",
+      "url": "",
+      "donnee": {
+        "adhesion": 79,
+        "institut": "Ifop",
+        "date": "10/2024",
+        "url": "https://www.ifop.com/wp-content/uploads/2024/10/CP_Etude_IFOP_pour_Yomoni.pdf"
+      },
+      "requetes_gnews": [
+        "superprofits OR surprofits OR \"taxe sur les superprofits\""
+      ],
+      "termes_forts": [
+        "superprofits",
+        "surprofits",
+        "taxe sur les superprofits"
+      ],
+      "termes_faibles": [
+        "TotalEnergies",
+        "profits",
+        "dividendes",
+        "grandes entreprises"
+      ],
+      "termes_legislatifs": [
+        "contribution exceptionnelle",
+        "bénéfices exceptionnels"
+      ],
+      "wikipedia": [
+        "Taxe sur les superprofits"
+      ],
+      "positions_declarees": {},
+      "_sondages": [
+        "Ifop/Yomoni 10/2024 : 79 %",
+        "Verian/Veblen 05/2026 : 70 % (pile au seuil)"
+      ],
+      "_statut_politique_publique": "Contribution exceptionnelle temporaire sur les grandes entreprises (2025) — partiellement traité ?"
     }
   ]
 }

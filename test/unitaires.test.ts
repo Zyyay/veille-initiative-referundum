@@ -16,7 +16,7 @@ const { publier } = await import("../src/alerts.js");
 const { MemoireStore } = await import("../src/lib/store.js");
 const { mentionDiscord, mentionsAutorisees, borner, couper, lots, taille } = await import("../src/lib/discord.js");
 const { mediaExclu, poidsMedia } = await import("../src/lib/medias.js");
-const { embedPresse, embedNuit, titreCourt, echapper } = await import("../src/messages.js");
+const { embedPresse, embedNuit, embedWiki, embedAgenda, titreCourt, echapper, TAG_A_CREER } = await import("../src/messages.js");
 const { recuperer, configurerReseau, decrireTelechargement } = await import("../src/lib/http.js");
 const { collecterGoogleNews } = await import("../src/sources/gnews.js");
 
@@ -274,6 +274,33 @@ describe("orange puis rouge (P3.3)", () => {
     await publier({ cle: "o", sujet, type: "presse", niveau: "moyenne", embeds: emb }, cfg, st, t);
     await publier({ cle: "r", sujet, type: "presse", niveau: "haute", embeds: emb }, cfg, st, h(3));
     expect((await st.derniereAlerte(sujet.id, "presse"))!.mention).toBe(true);
+  });
+});
+
+describe("sujets d'opportunité (tag A Creer)", () => {
+  const opp = { ...sujet, id: "opp", categorie: "opportunite" as const, url: "" };
+  const sc = scorerPresse(NATIONAUX.map((d, i) => art(1 + i * 0.1, d)), NOW, cfg, false, ilYA(25));
+  it("le tag est visible sur l'alerte presse, sans lien de page vide", () => {
+    const e = embedPresse(opp, sc, cfg);
+    expect(e.title).toContain(TAG_A_CREER);
+    expect(e.url).toBeUndefined();
+    expect(e.fields!.find((f) => f.name === "Liens")!.value).not.toContain("Page du sujet");
+  });
+  it("le tag est visible dans le récap de nuit, l'agenda et Wikipédia", () => {
+    expect(embedNuit([{ sujet: opp, sc }], debutNuit(NOW, cfg), NOW, cfg).description).toContain(TAG_A_CREER);
+    const r = { uid: "u", debut: NOW.toISOString(), objet: "x", type: "seance", lieu: "", etat: "" } as never;
+    expect(embedAgenda([opp], r, "nouveau", "https://x").fields!.some((f) => f.name.includes(TAG_A_CREER))).toBe(true);
+    expect(embedWiki(opp, { article: "A", vues: 10, jour: "j", ratio: 3, reference: 3 } as never).title).toContain(TAG_A_CREER);
+  });
+  it("les sujets du site n'ont pas le tag", () => {
+    expect(embedPresse(sujet, sc, cfg).title).not.toContain(TAG_A_CREER);
+    expect(embedPresse(sujet, sc, cfg).url).toBe(sujet.url);
+  });
+  it("la vraie config contient les 10 sujets d'opportunité, tous actifs", () => {
+    const vrais = (JSON.parse(readFileSync("config/sujets.json", "utf8")) as { sujets: { categorie?: string; actif: boolean }[] }).sujets;
+    const opps = vrais.filter((x) => x.categorie === "opportunite");
+    expect(opps).toHaveLength(10);
+    expect(opps.every((x) => x.actif)).toBe(true);
   });
 });
 

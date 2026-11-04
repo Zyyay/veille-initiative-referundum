@@ -4,9 +4,13 @@ import { configurerReseau } from "./http.js";
 
 export type Position = "pour" | "contre" | "non_declaree";
 
+/** « site » : sujet publié sur doleances-france.fr (défaut). « opportunite » : sujet à créer sur le site, surveillé en avance. */
+export type Categorie = "site" | "opportunite";
+
 export interface Sujet {
   id: string;
   actif: boolean;
+  categorie?: Categorie;
   titre: string;
   url: string;
   donnee: { adhesion: number | null; institut: string; date: string; url: string; question?: string };
