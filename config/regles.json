@@ -39,12 +39,15 @@
     "jours_reference_participation": 120,
     "seuil_sous_participation": 0.5
   },
-  "_reseau": "Délais en millisecondes. relances = tentatives supplémentaires après la première ; attente avant la relance n : backoff_ms × 2^(n-1).",
+  "_reseau": "Délais en millisecondes. relances = tentatives supplémentaires après la première ; attente avant la relance n : backoff_ms × 2^(n-1) (erreur réseau, 5xx) ou, pour un HTTP 429, Retry-After s'il est fourni, sinon backoff_429_ms × 2^(n-1). Au-delà de attente_429_max_ms, pas de relance. Entre deux requêtes Google News : gnews_delai_ms + aléa de 0 à gnews_alea_ms.",
   "reseau": {
     "timeout_ms": 20000,
     "timeout_telechargement_ms": 120000,
     "relances": 2,
     "backoff_ms": 2000,
-    "gnews_delai_ms": 2000
+    "backoff_429_ms": 30000,
+    "attente_429_max_ms": 90000,
+    "gnews_delai_ms": 6000,
+    "gnews_alea_ms": 3000
   }
 }

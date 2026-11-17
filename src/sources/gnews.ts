@@ -1,6 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import type { Config, Sujet } from "../lib/config.js";
-import { attendre, texte } from "../lib/http.js";
+import { attendre, ErreurHttp, texte } from "../lib/http.js";
 import { mediaExclu } from "../lib/medias.js";
 import { domaine, nettoyerTitre, rattacher } from "../lib/text.js";
 import type { Article } from "../lib/store.js";
@@ -35,27 +35,37 @@ export function analyserRss(xml: string): ElementRss[] {
   }).filter((x) => x.guid && x.titre);
 }
 
-/** Collecte Google News pour tous les sujets ; renvoie les articles rattachés (nouveaux ou non). */
+/**
+ * Collecte Google News pour tous les sujets ; renvoie les articles rattachés (nouveaux ou non).
+ * Si Google News répond HTTP 429 malgré les relances, la collecte s'arrête pour ce passage : continuer
+ * prolongerait la limitation. Les sujets restants sont rattrapés au passage suivant (fenêtre when:2d).
+ */
 export async function collecterGoogleNews(cfg: Config, log: (m: string) => void): Promise<Article[]> {
   const resultats: Article[] = [];
-  let premiere = true;
-  for (const sujet of cfg.sujets) {
-    const vus = new Set<string>();
-    for (const req of sujet.requetes_gnews) {
-      // Espacement entre requêtes : des rafales rapprochées déclenchent des HTTP 503 chez Google News.
-      if (!premiere) await attendre(cfg.regles.reseau.gnews_delai_ms);
-      premiere = false;
-      try {
-        const xml = await texte(urlRecherche(req));
-        for (const el of analyserRss(xml)) {
-          if (vus.has(el.guid) || mediaExclu(el.source_domaine, cfg.medias)) continue;
-          if (cfg.regles.presse.filtrer_par_titre && !rattacher(el.titre, sujet).ok) continue;
-          vus.add(el.guid);
-          resultats.push({ sujet_id: sujet.id, ...el });
-        }
-      } catch (e) {
-        log(`Google News — sujet ${sujet.id}, requête « ${req} » : ${(e as Error).message}`);
+  const requetes = cfg.sujets.flatMap((sujet) => sujet.requetes_gnews.map((req) => ({ sujet, req })));
+  const vus = new Map<string, Set<string>>();
+  for (const [n, { sujet, req }] of requetes.entries()) {
+    // Espacement entre requêtes, avec un aléa : des rafales rapprochées déclenchent des HTTP 429/503 chez Google News.
+    if (n > 0) await attendre(cfg.regles.reseau.gnews_delai_ms + Math.random() * (cfg.regles.reseau.gnews_alea_ms ?? 0));
+    if (!vus.has(sujet.id)) vus.set(sujet.id, new Set());
+    const dejaVus = vus.get(sujet.id)!;
+    try {
+      const xml = await texte(urlRecherche(req));
+      for (const el of analyserRss(xml)) {
+        if (dejaVus.has(el.guid) || mediaExclu(el.source_domaine, cfg.medias)) continue;
+        if (cfg.regles.presse.filtrer_par_titre && !rattacher(el.titre, sujet).ok) continue;
+        dejaVus.add(el.guid);
+        resultats.push({ sujet_id: sujet.id, ...el });
       }
+    } catch (e) {
+      if (e instanceof ErreurHttp && e.status === 429) {
+        const reportes = [...new Set(requetes.slice(n).map((x) => x.sujet.id))];
+        // Début du message constant : l'alerte technique Discord est dédoublonnée sur les 120 premiers caractères.
+        log(`Google News limité (HTTP 429) : collecte interrompue pour ce passage, les sujets restants seront rattrapés au passage suivant. `
+          + `${requetes.length - n} requête(s) reportée(s) : ${reportes.join(", ")}`);
+        break;
+      }
+      log(`Google News — sujet ${sujet.id}, requête « ${req} » : ${(e as Error).message}`);
     }
   }
   return resultats;
