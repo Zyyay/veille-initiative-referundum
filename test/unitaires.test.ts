@@ -17,7 +17,7 @@ const { MemoireStore } = await import("../src/lib/store.js");
 const { mentionDiscord, mentionsAutorisees, borner, couper, lots, taille } = await import("../src/lib/discord.js");
 const { mediaExclu, poidsMedia } = await import("../src/lib/medias.js");
 const { embedPresse, embedNuit, titreCourt, echapper } = await import("../src/messages.js");
-const { recuperer, configurerReseau, decrireTelechargement } = await import("../src/lib/http.js");
+const { recuperer, configurerReseau, decrireTelechargement, delaiRetryAfter } = await import("../src/lib/http.js");
 const { collecterGoogleNews } = await import("../src/sources/gnews.js");
 
 const cfg = loadConfig();
@@ -333,7 +333,7 @@ describe("affichage Discord (P4)", () => {
 describe("réseau (P5)", () => {
   const vrai = globalThis.fetch;
   const reglages = cfg.regles.reseau;
-  const rapide = { ...reglages, backoff_ms: 1, timeout_ms: 50, gnews_delai_ms: 60 };
+  const rapide = { ...reglages, backoff_ms: 1, timeout_ms: 50, gnews_delai_ms: 60, gnews_alea_ms: 0, backoff_429_ms: 5, attente_429_max_ms: 1000 };
   const fin = () => { globalThis.fetch = vrai; configurerReseau(reglages); };
   it("relance sur HTTP 503 avec 2 relances", async () => {
     configurerReseau(rapide);
@@ -366,6 +366,47 @@ describe("réseau (P5)", () => {
     finally { fin(); }
     expect(heures.length).toBe(2);
     expect(heures[1] - heures[0]).toBeGreaterThanOrEqual(55);
+  });
+  it("lit Retry-After en secondes ou en date HTTP", () => {
+    expect(delaiRetryAfter("30")).toBe(30_000);
+    expect(delaiRetryAfter(new Date(61_000).toUTCString(), 1_000)).toBe(60_000);
+    expect(delaiRetryAfter(null)).toBeNull();
+    expect(delaiRetryAfter("n'importe quoi")).toBeNull();
+  });
+  it("relance un HTTP 429 après l'attente Retry-After", async () => {
+    configurerReseau(rapide);
+    const heures: number[] = [];
+    globalThis.fetch = (async () => { heures.push(Date.now()); return heures.length === 1 ? new Response("", { status: 429, headers: { "Retry-After": "0" } }) : new Response("ok"); }) as typeof fetch;
+    try { const r = await recuperer("https://exemple.test/"); expect(r.texte()).toBe("ok"); expect(r.tentatives).toBe(2); }
+    finally { fin(); }
+  });
+  it("attend backoff_429_ms (×2) sans Retry-After", async () => {
+    configurerReseau({ ...rapide, backoff_429_ms: 40 });
+    const heures: number[] = [];
+    globalThis.fetch = (async () => { heures.push(Date.now()); return new Response("", { status: 429 }); }) as typeof fetch;
+    try { const r = await recuperer("https://exemple.test/"); expect(r.status).toBe(429); expect(r.tentatives).toBe(3); }
+    finally { fin(); }
+    expect(heures[1] - heures[0]).toBeGreaterThanOrEqual(35);
+    expect(heures[2] - heures[1]).toBeGreaterThanOrEqual(75);
+  });
+  it("ne relance pas un 429 si l'attente demandée dépasse le maximum", async () => {
+    configurerReseau(rapide);
+    let appels = 0;
+    globalThis.fetch = (async () => { appels++; return new Response("", { status: 429, headers: { "Retry-After": "3600" } }); }) as typeof fetch;
+    try { const r = await recuperer("https://exemple.test/"); expect(r.status).toBe(429); expect(appels).toBe(1); }
+    finally { fin(); }
+  });
+  it("interrompt la collecte Google News au premier 429 persistant", async () => {
+    configurerReseau(rapide);
+    let appels = 0;
+    globalThis.fetch = (async () => { appels++; return new Response("", { status: 429 }); }) as typeof fetch;
+    const c = { ...cfg, regles: { ...cfg.regles, reseau: rapide } };
+    const logs: string[] = [];
+    try { expect(await collecterGoogleNews(c, (m) => logs.push(m))).toEqual([]); }
+    finally { fin(); }
+    expect(appels).toBe(rapide.relances + 1); // la 2e requête n'est jamais envoyée
+    expect(logs).toHaveLength(1);
+    expect(logs[0]).toMatch(/HTTP 429.*2 requête\(s\) reportée\(s\)/);
   });
   it("décrit taille et durée d'un téléchargement", () => {
     expect(decrireTelechargement({ contenu: Buffer.alloc(0), octets: 12_300_000, dureeMs: 8200, tentatives: 1 })).toBe("12,3 Mo en 8,2 s (1 tentative)");

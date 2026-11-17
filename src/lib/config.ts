@@ -48,7 +48,16 @@ export interface Regles {
   reseau: Reseau;
 }
 
-export interface Reseau { timeout_ms: number; timeout_telechargement_ms: number; relances: number; backoff_ms: number; gnews_delai_ms: number }
+export interface Reseau {
+  timeout_ms: number; timeout_telechargement_ms: number; relances: number; backoff_ms: number;
+  /** Attente de base avant de relancer après un HTTP 429 (puis ×2), si le serveur n'envoie pas Retry-After. */
+  backoff_429_ms: number;
+  /** Au-delà de cette attente (Retry-After compris), on ne relance pas : la réponse 429 est renvoyée telle quelle. */
+  attente_429_max_ms: number;
+  gnews_delai_ms: number;
+  /** Aléa ajouté au délai entre deux requêtes Google News (0 à gnews_alea_ms). */
+  gnews_alea_ms: number;
+}
 
 export interface Medias {
   medias_nationaux: string[]; domaines_exclus: string[]; suffixes_exclus: string[];
