@@ -43,7 +43,7 @@
     },
     {
       "id": "aides-entreprises",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il conditionner les aides publiques aux entreprises au maintien de l'emploi en France ?",
       "url": "https://doleances-france.fr/sujets/conditionner-les-aides-publiques-aux-entreprises-au-maintien-de-l-emploi-en-france",
       "donnee": {
@@ -85,7 +85,7 @@
     },
     {
       "id": "dissuasion-nucleaire",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il maintenir une dissuasion nucléaire strictement nationale ?",
       "url": "https://doleances-france.fr/sujets/maintenir-souverainete-francaise-de-la-dissuasion-nucleaire",
       "donnee": {
@@ -125,7 +125,7 @@
     },
     {
       "id": "pass-culture",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il réserver le Pass Culture au patrimoine plutôt qu'à des industries culturelles déjà rentables ?",
       "url": "https://doleances-france.fr/sujets/faut-il-reserver-le-pass-culture-au-patrimoine-plutot-qu-a-des-industries-culturelles-deja-rentables",
       "donnee": {
@@ -260,7 +260,7 @@
     },
     {
       "id": "soins-non-assures",
-      "actif": false,
+      "actif": true,
       "titre": "Pour les soins non urgents, faut-il exiger un paiement avant de soigner les personnes non assurées ?",
       "url": "https://doleances-france.fr/sujets/pour-les-soins-non-urgents-faut-il-exiger-un-paiement-avant-de-soigner-les-personnes-non-assurees",
       "donnee": {
@@ -397,7 +397,7 @@
     },
     {
       "id": "corruption-elus",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il renforcer la chaîne judiciaire contre la corruption des élus ?",
       "url": "https://doleances-france.fr/sujets/faut-il-reduire-les-delais-et-augmenter-les-poursuites-contre-la-corruption-d-elus",
       "donnee": {
@@ -443,7 +443,7 @@
     },
     {
       "id": "regle-or-budgetaire",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il inscrire dans la Constitution l'interdiction de voter un budget en déficit ?",
       "url": "https://doleances-france.fr/sujets/interdire-constitutionnellement-le-vote-d-un-budget-en-deficit",
       "donnee": {
@@ -484,7 +484,7 @@
     },
     {
       "id": "legitime-defense",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il renforcer le droit de légitime défense du citoyen ?",
       "url": "https://doleances-france.fr/sujets/faut-il-renforcer-le-droit-de-legitime-defense-du-citoyen",
       "donnee": {
@@ -525,7 +525,7 @@
     },
     {
       "id": "logement-social",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il réformer l'attribution et le contrôle des logements sociaux en France ?",
       "url": "https://doleances-france.fr/sujets/faut-il-reformer-l-attribution-et-le-controle-des-logements-sociaux-en-france",
       "donnee": {
@@ -574,7 +574,7 @@
     },
     {
       "id": "emploi-seniors",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il faire plus pour l'emploi des seniors en France ?",
       "url": "https://doleances-france.fr/sujets/faut-il-faire-plus-pour-l-emploi-des-seniors-en-france",
       "donnee": {
@@ -612,7 +612,7 @@
     },
     {
       "id": "revenu-agriculteurs",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il mieux soutenir le revenu des agriculteurs ?",
       "url": "https://doleances-france.fr/sujets/faut-il-reformer-les-regles-agricoles-pour-revaloriser-le-metier-d-agriculteur",
       "donnee": {
@@ -658,7 +658,7 @@
     },
     {
       "id": "exigence-examens",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il relever le niveau d'exigence des examens (bac, brevet), même si cela fait baisser le taux de réussite ?",
       "url": "https://doleances-france.fr/sujets/faut-il-relever-le-niveau-d-exigence-des-examens-bac-brevet-meme-si-cela-fait-baisser-le-taux-de-reussite",
       "donnee": {
@@ -701,7 +701,7 @@
     },
     {
       "id": "metier-enseignant",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il revaloriser le métier d'enseignant pour enrayer la crise de recrutement ?",
       "url": "https://doleances-france.fr/sujets/attractivite-metier-enseignant",
       "donnee": {
@@ -748,7 +748,7 @@
     },
     {
       "id": "aide-developpement",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il réduire l'aide française au développement international ?",
       "url": "https://doleances-france.fr/sujets/faut-il-reduire-le-budget-de-l-aide-publique-au-developpement-de-la-france",
       "donnee": {
@@ -786,7 +786,7 @@
     },
     {
       "id": "revocation-elus",
-      "actif": false,
+      "actif": true,
       "titre": "Faut-il donner aux citoyens le droit de révoquer un élu en exercice ?",
       "url": "https://doleances-france.fr/sujets/faut-il-donner-aux-citoyens-le-droit-de-revoquer-un-elu-en-exercice",
       "donnee": {
